@@ -1,0 +1,41 @@
+# ==========================================
+# Gradle & Build Artifacts
+# ==========================================
+.gradle/
+build/
+**/build/
+.kotlin/
+/.artifacts/
+local.properties
+.externalNativeBuild
+.cxx
+captures
+
+# ==========================================
+# Android Studio / IntelliJ IDEA
+# ==========================================
+.idea/*
+!.idea/vcs.xml
+!.idea/workspace.xml
+!.idea/codeStyles
+!.idea/runConfigurations
+!.idea/dictionary.xml
+*.iml
+*.iws
+*.ipr
+.DS_Store
+
+# ==========================================
+# iOS / Xcode (KMP specific)
+# ==========================================
+**/xcuserdata/
+*.xcworkspace/
+!*.xcodeproj/project.xcworkspace/
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+!*.xcodeproj/xcshareddata/
+!*.xcworkspace/contents.xcworkspacedata
+**/xcshareddata/WorkspaceSettings.xcsettings
+DerivedData/
+.swiftpm/
+Pods/

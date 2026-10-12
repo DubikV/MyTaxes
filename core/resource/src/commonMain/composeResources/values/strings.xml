@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <string name="theme_auto">System</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_light">Light</string>
+    <string name="error">Error</string>
+    <string name="ok">OK</string>
+    <string name="loading">Loading…</string>
+    <string name="cancel">Cancel</string>
+    <string name="select">Select</string>
+    <string name="delete">Delete</string>
+
+    <string name="app_title">My Taxes</string>
+
+    <string name="login_title">Sign in</string>
+    <string name="register_title">Create account</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="sign_in">Sign in</string>
+    <string name="sign_up">Sign up</string>
+    <string name="no_account">No account? Sign up</string>
+    <string name="have_account">Already have an account? Sign in</string>
+    <string name="logout">Log out</string>
+    <string name="email_empty">Email must not be empty</string>
+    <string name="password_empty">Password must not be empty</string>
+
+    <string name="calculator_title">Tax calculation</string>
+    <string name="income_date">Income date</string>
+    <string name="income_amount">Income amount</string>
+    <string name="currency">Currency</string>
+    <string name="calculate">Calculate</string>
+    <string name="amount_invalid">Enter a valid amount</string>
+    <string name="future_date_invalid">The date cannot be in the future</string>
+    <string name="save_failed">Not saved to history: %1$s</string>
+    <string name="date_required">Select the income date</string>
+    <string name="nbu_rate">NBU rate</string>
+    <string name="add_income">Add income</string>
+    <string name="income_number">Income %1$d</string>
+    <string name="income_uah">Income in UAH</string>
+    <string name="single_tax">Single tax (%1$s)</string>
+    <string name="military_levy">Military levy (%1$s)</string>
+    <string name="esv">Single social contribution (ESV, months: %1$d)</string>
+    <string name="total_tax">Total tax</string>
+    <string name="sign_in_to_save">Sign in to save your history</string>
+    <string name="result_saved">Saved to history</string>
+    <string name="history">History</string>
+    <string name="history_empty">No calculations yet</string>
+    <string name="back">Back</string>
+
+    <string name="language">Language</string>
+    <string name="language_system">System</string>
+    <string name="fop_group">FOP group</string>
+    <string name="fop_group_1">Group 1</string>
+    <string name="fop_group_2">Group 2</string>
+    <string name="fop_group_3_5">Group 3 · 5%</string>
+    <string name="fop_group_3_3">Group 3 · 3% (VAT)</string>
+    <string name="single_tax_fixed">Single tax (fixed per month)</string>
+    <string name="military_levy_fixed">Military levy (fixed per month)</string>
+    <string name="fixed_tax_note">Groups 1 and 2 pay fixed monthly amounts that do not depend on the income.</string>
+    <string name="annual_limit">Annual income limit</string>
+</resources>

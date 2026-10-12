@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <string name="theme_auto">Системна</string>
+    <string name="theme_dark">Темна</string>
+    <string name="theme_light">Світла</string>
+    <string name="error">Помилка</string>
+    <string name="ok">OK</string>
+    <string name="loading">Завантаження…</string>
+    <string name="cancel">Скасувати</string>
+    <string name="select">Обрати</string>
+    <string name="delete">Видалити</string>
+
+    <string name="app_title">Мої податки</string>
+
+    <string name="login_title">Вхід</string>
+    <string name="register_title">Створення облікового запису</string>
+    <string name="email">Email</string>
+    <string name="password">Пароль</string>
+    <string name="sign_in">Увійти</string>
+    <string name="sign_up">Зареєструватися</string>
+    <string name="no_account">Немає облікового запису? Зареєструватися</string>
+    <string name="have_account">Вже є обліковий запис? Увійти</string>
+    <string name="logout">Вийти</string>
+    <string name="email_empty">Введіть email</string>
+    <string name="password_empty">Введіть пароль</string>
+
+    <string name="calculator_title">Розрахунок податку</string>
+    <string name="income_date">Дата надходження</string>
+    <string name="income_amount">Сума надходження</string>
+    <string name="currency">Валюта</string>
+    <string name="calculate">Розрахувати</string>
+    <string name="future_date_invalid">Дата не може бути в майбутньому</string>
+    <string name="save_failed">Не збережено в історію: %1$s</string>
+    <string name="date_required">Оберіть дату надходження</string>
+    <string name="amount_invalid">Введіть коректну суму</string>
+    <string name="nbu_rate">Курс НБУ</string>
+    <string name="add_income">Додати дохід</string>
+    <string name="income_number">Дохід %1$d</string>
+    <string name="income_uah">Дохід у гривнях</string>
+    <string name="single_tax">Єдиний податок (%1$s)</string>
+    <string name="military_levy">Військовий збір (%1$s)</string>
+    <string name="esv">ЄСВ (місяців: %1$d)</string>
+    <string name="total_tax">Всього податків</string>
+    <string name="sign_in_to_save">Увійдіть, щоб зберігати історію</string>
+    <string name="result_saved">Збережено в історію</string>
+    <string name="history">Історія</string>
+    <string name="history_empty">Розрахунків ще немає</string>
+    <string name="back">Назад</string>
+
+    <string name="language">Мова</string>
+    <string name="language_system">Системна</string>
+    <string name="fop_group">Група ФОП</string>
+    <string name="fop_group_1">1 група</string>
+    <string name="fop_group_2">2 група</string>
+    <string name="fop_group_3_5">3 група · 5%</string>
+    <string name="fop_group_3_3">3 група · 3% (ПДВ)</string>
+    <string name="single_tax_fixed">Єдиний податок (фіксований за місяць)</string>
+    <string name="military_levy_fixed">Військовий збір (фіксований за місяць)</string>
+    <string name="fixed_tax_note">Платники 1 та 2 груп сплачують фіксовані суми щомісяця, які не залежать від доходу.</string>
+    <string name="annual_limit">Річний ліміт доходу</string>
+</resources>
