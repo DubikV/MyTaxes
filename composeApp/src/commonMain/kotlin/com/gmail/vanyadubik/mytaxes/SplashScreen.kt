@@ -53,7 +53,7 @@ fun SplashScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(AppColors.backgroundDark.copy(alpha = alpha.value))
+            .background(AppColors.onPrimaryContainerLight.copy(alpha = alpha.value))
     ) {
         Image(
             painter = painterResource(Res.drawable.ic_splash),
