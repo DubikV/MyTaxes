@@ -48,10 +48,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.gmail.vanyadubik.mytaxes.commonui.language.LanguageSwitchButton
+import com.gmail.vanyadubik.mytaxes.commonui.ui.components.AppBarActions
 import com.gmail.vanyadubik.mytaxes.commonui.ui.components.button.AppButton
+import com.gmail.vanyadubik.mytaxes.commonui.ui.components.textfield.DateField
 import com.gmail.vanyadubik.mytaxes.commonui.ui.dialog.ErrorAppDialog
-import com.gmail.vanyadubik.mytaxes.commonui.ui.theme.button.ThemeSwitchButton
 import com.gmail.vanyadubik.mytaxes.commonui.utils.formatDate
 import com.gmail.vanyadubik.mytaxes.commonui.utils.formatNumber
 import com.gmail.vanyadubik.mytaxes.commonui.utils.title
@@ -71,7 +71,6 @@ import com.gmail.vanyadubik.mytaxes.resource.fop_group
 import com.gmail.vanyadubik.mytaxes.resource.future_date_invalid
 import com.gmail.vanyadubik.mytaxes.resource.military_levy_fixed
 import com.gmail.vanyadubik.mytaxes.resource.single_tax_fixed
-import com.gmail.vanyadubik.mytaxes.resource.history
 import com.gmail.vanyadubik.mytaxes.resource.income_amount
 import com.gmail.vanyadubik.mytaxes.resource.income_date
 import com.gmail.vanyadubik.mytaxes.resource.income_uah
@@ -79,8 +78,6 @@ import com.gmail.vanyadubik.mytaxes.resource.loading
 import com.gmail.vanyadubik.mytaxes.resource.add_income
 import com.gmail.vanyadubik.mytaxes.resource.delete
 import com.gmail.vanyadubik.mytaxes.resource.income_number
-import com.gmail.vanyadubik.mytaxes.resource.logout
-import com.gmail.vanyadubik.mytaxes.resource.sign_in
 import com.gmail.vanyadubik.mytaxes.resource.sign_in_to_save
 import com.gmail.vanyadubik.mytaxes.resource.esv
 import com.gmail.vanyadubik.mytaxes.resource.military_levy
@@ -97,7 +94,6 @@ import org.koin.compose.viewmodel.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CalculatorScreen(
-    onOpenHistory: () -> Unit,
     onOpenLogin: () -> Unit,
     viewModel: CalculatorViewModel = koinViewModel(),
 ) {
@@ -107,26 +103,7 @@ fun CalculatorScreen(
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(Res.string.calculator_title)) },
-                actions = {
-                    ThemeSwitchButton(
-                        themeHandler = viewModel.themeAnimationHandler,
-                        iconModifier = Modifier.padding(12.dp),
-                        iconSize = 24.dp,
-                    )
-                    LanguageSwitchButton()
-                    if (state.isLoggedIn) {
-                        IconButton(onClick = onOpenHistory) {
-                            Icon(Icons.Default.History, contentDescription = stringResource(Res.string.history))
-                        }
-                        IconButton(onClick = viewModel::logout) {
-                            Icon(Icons.AutoMirrored.Filled.Logout, contentDescription = stringResource(Res.string.logout))
-                        }
-                    } else {
-                        IconButton(onClick = onOpenLogin) {
-                            Icon(Icons.AutoMirrored.Filled.Login, contentDescription = stringResource(Res.string.sign_in))
-                        }
-                    }
-                }
+                actions = { AppBarActions() }
             )
         }
     ) { padding ->
@@ -229,6 +206,7 @@ private fun IncomeCard(
                 }
             }
             DateField(
+                label = stringResource(Res.string.income_date),
                 date = row.date,
                 isError = row.error == InputError.DATE || row.error == InputError.FUTURE_DATE,
                 errorText = when (row.error) {
@@ -262,70 +240,6 @@ private fun IncomeCard(
         }
     }
 }
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun DateField(
-    date: LocalDate?,
-    isError: Boolean,
-    errorText: String?,
-    onDateSelected: (LocalDate) -> Unit,
-) {
-    var showPicker by remember { mutableStateOf(false) }
-
-    OutlinedTextField(
-        value = date?.formatDate() ?: "",
-        onValueChange = {},
-        label = { Text(stringResource(Res.string.income_date)) },
-        trailingIcon = { Icon(Icons.Default.CalendarMonth, contentDescription = null) },
-        isError = isError,
-        supportingText = errorText?.let { { Text(it) } },
-        readOnly = true,
-        enabled = false,
-        singleLine = true,
-        colors = androidx.compose.material3.OutlinedTextFieldDefaults.colors(
-            disabledTextColor = MaterialTheme.colorScheme.onSurface,
-            disabledBorderColor = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.outline,
-            disabledLabelColor = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
-            disabledTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            disabledSupportingTextColor = MaterialTheme.colorScheme.error,
-        ),
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null,
-                onClick = { showPicker = true },
-            ),
-    )
-
-    if (showPicker) {
-        val pickerState = androidx.compose.material3.rememberDatePickerState(
-            initialSelectedDateMillis = date?.let { it.toEpochDays() * MILLIS_IN_DAY }
-        )
-        DatePickerDialog(
-            onDismissRequest = { showPicker = false },
-            confirmButton = {
-                TextButton(
-                    enabled = pickerState.selectedDateMillis != null,
-                    onClick = {
-                        pickerState.selectedDateMillis?.let {
-                            onDateSelected(LocalDate.fromEpochDays(it / MILLIS_IN_DAY))
-                        }
-                        showPicker = false
-                    }
-                ) { Text(stringResource(Res.string.select)) }
-            },
-            dismissButton = {
-                TextButton(onClick = { showPicker = false }) { Text(stringResource(Res.string.cancel)) }
-            },
-        ) {
-            DatePicker(state = pickerState)
-        }
-    }
-}
-
-private const val MILLIS_IN_DAY = 86_400_000L
 
 @Composable
 private fun ResultCard(result: TaxCalculation) {

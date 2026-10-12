@@ -24,12 +24,8 @@ class HistoryViewModel(
     private val _state = MutableStateFlow(HistoryUiState())
     val state: StateFlow<HistoryUiState> = _state.asStateFlow()
 
-    init {
-        load()
-    }
-
     fun load() {
-        _state.update { it.copy(isLoading = true, errorMessage = null) }
+        _state.update { it.copy(isLoading = it.items.isEmpty(), errorMessage = null) }
         viewModelScope.launch {
             when (val result = taxHistory.getAll()) {
                 is ResultState.Success -> _state.update {

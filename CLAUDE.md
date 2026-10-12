@@ -22,7 +22,13 @@ Gradle version catalog (`gradle/libs.versions.toml`, type-safe project accessors
 
 Firebase is used **through REST APIs with Ktor** (no native Firebase SDKs, no google-services.json):
 - Auth: Identity Toolkit (`accounts:signInWithPassword`, `accounts:signUp`) and Secure Token (`/token` refresh).
-- Firestore: `users/{uid}/calculations/{id}`, authorized with the user's ID token (rules in `firestore.rules`).
+- Firestore: `users/{uid}/calculations/{id}` and `users/{uid}/expenses/{id}`, authorized with the user's ID token (rules in `firestore.rules`).
+- Push reminders (FCM): `PushNotificationUseCase` stores the device token + FOP group + language in
+  `users/{uid}/devices/{token}` (removed on logout); the GitHub Actions workflow `.github/workflows/tax-reminders.yml`
+  runs `reminders/send.js` daily (~09:00 Kyiv, once per day via the `meta/reminders` marker) and sends the deadline
+  reminders from `reminders/deadlines.js` through FCM (no Blaze plan needed; secret `FIREBASE_SERVICE_ACCOUNT` = service
+  account JSON). Android only: `FirebaseApp` is initialised by hand in `TaxApp` (`firebaseAndroidOptions`, no
+  google-services plugin); iOS has a stub `PushTokenProvider` (no token). Deploy rules: `firebase deploy --only firestore:rules`.
 - Config (Web API key, project id): `composeApp/.../di/FirebaseSettings.kt`.
 
 ## Module layout and dependency rules
@@ -31,6 +37,7 @@ Firebase is used **through REST APIs with Ktor** (no native Firebase SDKs, no go
 composeApp            app entry points, Koin start, navigation, MainViewModel, splash
 feature:login         LoginScreen + LoginViewModel (sign in / sign up)
 feature:calculator    CalculatorScreen + CalculatorViewModel (input -> NBU rate -> tax -> save to history)
+feature:home          HomeScreen + HomeViewModel (chart of income / taxes / expenses per month, expenses input)
 feature:history       HistoryScreen + HistoryViewModel (list / delete saved calculations)
 core:domen            pure Kotlin domain: models, repository interfaces, use cases (no Ktor/Compose)
 core:network          Ktor client, DTOs, repository implementations (NBU, Firebase Auth, Firestore)
@@ -58,8 +65,11 @@ depend on network/UI. Repository **interfaces live in `core:domen`**, implementa
 - Persisted preferences are declared in `PreferenceKey` and accessed via `DataStoreUseCase`.
   `logout()` clears all keys except `PreferenceKey.getSavedKeys()` (theme).
 - Navigation is defined in `composeApp/.../navigation/AppNavigation.kt` (string routes in `AppScreen`); the start
-  destination is always the calculator; the login screen is opened on demand and closes itself after sign in
-  (`MainViewModel.isLoggedIn`), history is only reachable while signed in.
+  destination is the home screen. A bottom `NavigationBar` switches between home, calculator and history (history only
+  while signed in) and holds the sign in / log out item; the login screen is opened on demand (bar hidden) and closes
+  itself after sign in (`MainViewModel.isLoggedIn`). Tabs keep their ViewModels, so data screens reload on `ON_RESUME`.
+- Dashboard: `MonthlyStatsUseCase` groups calculations (incomes by income date, tax by the first income's month) and
+  `Expense`s (UAH, stored per user, signed in only) by month for the last 6 months.
 - Localization: English (`values/`) and Ukrainian (`values-uk/`) in `core/resource`; add every new string to both files.
   The language is chosen in-app (`AppLanguage`, stored in `PreferenceKey.Language`, default = system). `LanguageHandler`
   (`core:common-ui`) + `applyAppLanguage` (expect/actual: `Locale.setDefault` on Android, `AppleLanguages` on iOS) switch the

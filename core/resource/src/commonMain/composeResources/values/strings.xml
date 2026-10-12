@@ -58,4 +58,23 @@
     <string name="military_levy_fixed">Military levy (fixed per month)</string>
     <string name="fixed_tax_note">Groups 1 and 2 pay fixed monthly amounts that do not depend on the income.</string>
     <string name="annual_limit">Annual income limit</string>
+
+    <string name="nav_home">Home</string>
+    <string name="nav_calculator">Calculator</string>
+    <string name="home_title">Overview</string>
+    <string name="home_sign_in_prompt">Sign in to see your income, taxes and expenses on the chart</string>
+    <string name="chart_title">Income, taxes and expenses</string>
+    <string name="chart_income">Income</string>
+    <string name="chart_tax">Taxes</string>
+    <string name="chart_expenses">Expenses</string>
+    <string name="chart_empty">No data for the last months yet</string>
+    <string name="chart_net">Net profit (income − taxes − expenses)</string>
+    <string name="chart_period">Last %1$d months</string>
+    <string name="expenses_title">Expenses</string>
+    <string name="add_expense">Add expense</string>
+    <string name="expense_amount">Amount, UAH</string>
+    <string name="expense_date">Expense date</string>
+    <string name="expense_note">Note (optional)</string>
+    <string name="expenses_empty">No expenses yet</string>
+    <string name="save">Save</string>
 </resources>

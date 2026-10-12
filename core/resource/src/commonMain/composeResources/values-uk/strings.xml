@@ -58,4 +58,23 @@
     <string name="military_levy_fixed">Військовий збір (фіксований за місяць)</string>
     <string name="fixed_tax_note">Платники 1 та 2 груп сплачують фіксовані суми щомісяця, які не залежать від доходу.</string>
     <string name="annual_limit">Річний ліміт доходу</string>
+
+    <string name="nav_home">Головна</string>
+    <string name="nav_calculator">Калькулятор</string>
+    <string name="home_title">Огляд</string>
+    <string name="home_sign_in_prompt">Увійдіть, щоб бачити на графіку доходи, податки та витрати</string>
+    <string name="chart_title">Доходи, податки та витрати</string>
+    <string name="chart_income">Доходи</string>
+    <string name="chart_tax">Податки</string>
+    <string name="chart_expenses">Витрати</string>
+    <string name="chart_empty">Даних за останні місяці ще немає</string>
+    <string name="chart_net">Чистий прибуток (доходи − податки − витрати)</string>
+    <string name="chart_period">Останні %1$d міс.</string>
+    <string name="expenses_title">Витрати</string>
+    <string name="add_expense">Додати витрату</string>
+    <string name="expense_amount">Сума, грн</string>
+    <string name="expense_date">Дата витрати</string>
+    <string name="expense_note">Примітка (необов’язково)</string>
+    <string name="expenses_empty">Витрат ще немає</string>
+    <string name="save">Зберегти</string>
 </resources>

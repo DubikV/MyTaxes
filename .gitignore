@@ -39,3 +39,6 @@ captures
 DerivedData/
 .swiftpm/
 Pods/
+
+# Firebase client config (values are in code, file is not read by the build)
+**/google-services.json

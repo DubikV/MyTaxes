@@ -2,7 +2,6 @@ package com.gmail.vanyadubik.mytaxes.featurecalculator
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gmail.vanyadubik.mytaxes.commonui.ui.theme.ThemeAnimationHandler
 import com.gmail.vanyadubik.mytaxes.domen.model.Currency
 import com.gmail.vanyadubik.mytaxes.domen.model.FopGroup
 import com.gmail.vanyadubik.mytaxes.domen.model.IncomeInput
@@ -50,7 +49,6 @@ class CalculatorViewModel(
     private val taxHistory: TaxHistoryUseCase,
     private val authUseCase: AuthUseCase,
     private val dataStoreUseCase: DataStoreUseCase,
-    val themeAnimationHandler: ThemeAnimationHandler,
 ) : ViewModel() {
 
     private var nextRowId = 0
@@ -102,10 +100,6 @@ class CalculatorViewModel(
     }
 
     fun dismissError() = _state.update { it.copy(errorMessage = null) }
-
-    fun logout() {
-        viewModelScope.launch { authUseCase.logout() }
-    }
 
     fun calculate() {
         val current = _state.value

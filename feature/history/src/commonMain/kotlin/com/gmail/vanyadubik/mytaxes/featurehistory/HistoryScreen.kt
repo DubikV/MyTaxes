@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Card
@@ -30,13 +29,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
+import com.gmail.vanyadubik.mytaxes.commonui.ui.components.AppBarActions
 import com.gmail.vanyadubik.mytaxes.commonui.ui.dialog.ErrorAppDialog
 import com.gmail.vanyadubik.mytaxes.commonui.utils.formatDate
 import com.gmail.vanyadubik.mytaxes.commonui.utils.formatNumber
 import com.gmail.vanyadubik.mytaxes.commonui.utils.title
 import com.gmail.vanyadubik.mytaxes.domen.model.TaxCalculation
 import com.gmail.vanyadubik.mytaxes.resource.Res
-import com.gmail.vanyadubik.mytaxes.resource.back
 import com.gmail.vanyadubik.mytaxes.resource.delete
 import com.gmail.vanyadubik.mytaxes.resource.history
 import com.gmail.vanyadubik.mytaxes.resource.history_empty
@@ -47,24 +48,22 @@ import org.koin.compose.viewmodel.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HistoryScreen(
-    onBack: () -> Unit,
     viewModel: HistoryViewModel = koinViewModel(),
 ) {
     val state by viewModel.state.collectAsState()
+
+    // The tab keeps its ViewModel between visits, so reload to pick up new calculations
+    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { viewModel.load() }
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(Res.string.history)) },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(Res.string.back))
-                    }
-                },
                 actions = {
                     IconButton(onClick = viewModel::load) {
                         Icon(Icons.Default.Refresh, contentDescription = null)
                     }
+                    AppBarActions()
                 }
             )
         }

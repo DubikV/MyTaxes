@@ -10,6 +10,16 @@
 		A3243904C19BCBC93D5738CE /* Pods_iosApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 862447091F5D48D985BED31B /* Pods_iosApp.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		B23CC35611D1676B00000002 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B23CC35811D1676B00000001 /* Pods.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = ED39C638569286489CD697A6C8964146;
+			remoteInfo = "Pods-iosApp";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		57AB6BAF8AC031715C4CD274 /* MyTaxes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyTaxes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		862447091F5D48D985BED31B /* Pods_iosApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iosApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -98,24 +108,6 @@
 		};
 /* End PBXGroup section */
 
-/* Begin PBXContainerItemProxy section */
-		B23CC35611D1676B00000002 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = B23CC35811D1676B00000001 /* Pods.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = ED39C638569286489CD697A6C8964146;
-			remoteInfo = "Pods-iosApp";
-		};
-/* End PBXContainerItemProxy section */
-
-/* Begin PBXTargetDependency section */
-		B23CC35711D1676B00000003 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "Pods-iosApp";
-			targetProxy = B23CC35611D1676B00000002 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
 /* Begin PBXNativeTarget section */
 		6272723D94D7C2EDBC0511D0 /* iosApp */ = {
 			isa = PBXNativeTarget;
@@ -126,7 +118,6 @@
 				1977B3D96B0BFA2BF49ACFF1 /* Sources */,
 				9A13590723E51B3694891529 /* Frameworks */,
 				89F6D8C0F9056A7F8062F966 /* Resources */,
-				0FCEB4BB32CFBB9CA5F56A87 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -186,23 +177,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0FCEB4BB32CFBB9CA5F56A87 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-iosApp/Pods-iosApp-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-iosApp/Pods-iosApp-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-iosApp/Pods-iosApp-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		3222DD5D08DFD1D7B628B043 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -255,6 +229,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B23CC35711D1676B00000003 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Pods-iosApp";
+			targetProxy = B23CC35611D1676B00000002 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		49629100E6422EFE96083095 /* Release */ = {

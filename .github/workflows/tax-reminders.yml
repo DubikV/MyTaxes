@@ -1,0 +1,34 @@
+name: Tax reminders
+
+on:
+  schedule:
+    # 09:00 Kyiv time in summer (UTC+3) and winter (UTC+2); the script sends once a day
+    - cron: "0 6 * * *"
+    - cron: "0 7 * * *"
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Send even if the reminders were already sent today"
+        type: boolean
+        default: false
+      test_date:
+        description: "Optional: pretend today is this date (YYYY-MM-DD), e.g. 2026-11-06 is 3 days before a deadline"
+        type: string
+        required: false
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install --no-audit --no-fund
+        working-directory: reminders
+      - run: node send.js
+        working-directory: reminders
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          FORCE: ${{ inputs.force }}
+          TEST_DATE: ${{ inputs.test_date }}

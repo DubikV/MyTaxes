@@ -4,11 +4,15 @@ import com.gmail.vanyadubik.mytaxes.common.logger.LogI
 import com.gmail.vanyadubik.mytaxes.common.utils.PlatformConfig.isDebugBuild
 import com.gmail.vanyadubik.mytaxes.domen.repository.AuthRepository
 import com.gmail.vanyadubik.mytaxes.domen.repository.ExchangeRateRepository
+import com.gmail.vanyadubik.mytaxes.domen.repository.DeviceRepository
+import com.gmail.vanyadubik.mytaxes.domen.repository.ExpenseRepository
 import com.gmail.vanyadubik.mytaxes.domen.repository.TaxHistoryRepository
 import com.gmail.vanyadubik.mytaxes.network.FirebaseConfig
 import com.gmail.vanyadubik.mytaxes.network.HttpEngineFactory
 import com.gmail.vanyadubik.mytaxes.network.repository.AuthRepositoryImpl
 import com.gmail.vanyadubik.mytaxes.network.repository.ExchangeRateRepositoryImpl
+import com.gmail.vanyadubik.mytaxes.network.repository.DeviceRepositoryImpl
+import com.gmail.vanyadubik.mytaxes.network.repository.ExpenseRepositoryImpl
 import com.gmail.vanyadubik.mytaxes.network.repository.TaxHistoryRepositoryImpl
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.DefaultRequest
@@ -39,6 +43,8 @@ fun networkModule(
     singleOf(::AuthRepositoryImpl).bind(AuthRepository::class)
     singleOf(::ExchangeRateRepositoryImpl).bind(ExchangeRateRepository::class)
     singleOf(::TaxHistoryRepositoryImpl).bind(TaxHistoryRepository::class)
+    singleOf(::ExpenseRepositoryImpl).bind(ExpenseRepository::class)
+    singleOf(::DeviceRepositoryImpl).bind(DeviceRepository::class)
 }
 
 fun createHttpClient(
@@ -64,7 +70,7 @@ fun createHttpClient(
     if (enableNetworkLogs) {
         install(Logging) {
             logger = Logger.SIMPLE
-            level = LogLevel.INFO
+            level = LogLevel.BODY
         }
     }
 

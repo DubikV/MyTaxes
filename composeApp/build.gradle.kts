@@ -30,11 +30,14 @@ kotlin {
             implementation(projects.feature.login)
             implementation(projects.feature.calculator)
             implementation(projects.feature.history)
+            implementation(projects.feature.home)
         }
         androidMain.dependencies {
             implementation(libs.androidx.core.splashscreen)
             implementation(libs.androidx.lifecycle.viewmodel.compose)
             implementation(libs.androidx.activity.compose)
+            implementation(project.dependencies.platform(libs.firebase.bom))
+            implementation(libs.firebase.messaging)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

@@ -7,6 +7,6 @@ import com.gmail.vanyadubik.mytaxes.network.FirebaseConfig
  * The Web API key is not a secret; access to the data is protected by Firestore security rules.
  */
 val firebaseConfig = FirebaseConfig(
-    apiKey = "YOUR_FIREBASE_WEB_API_KEY",
-    projectId = "YOUR_FIREBASE_PROJECT_ID",
+    apiKey = "AIzaSyCMEnr9baOneYbQLJrzcmBhgq3k0fdQcug",
+    projectId = "mytaxes-53780",
 )
