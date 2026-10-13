@@ -7,6 +7,7 @@ import com.gmail.vanyadubik.mytaxes.domen.model.FopGroup
 import com.gmail.vanyadubik.mytaxes.domen.model.IncomeInput
 import com.gmail.vanyadubik.mytaxes.domen.model.ResultState
 import com.gmail.vanyadubik.mytaxes.domen.model.TaxCalculation
+import com.gmail.vanyadubik.mytaxes.domen.usecase.AccountUseCase
 import com.gmail.vanyadubik.mytaxes.domen.usecase.AuthUseCase
 import com.gmail.vanyadubik.mytaxes.domen.usecase.CalculateTaxUseCase
 import com.gmail.vanyadubik.mytaxes.domen.usecase.DataStoreUseCase
@@ -14,6 +15,7 @@ import com.gmail.vanyadubik.mytaxes.domen.usecase.TaxHistoryUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
@@ -41,6 +43,10 @@ data class CalculatorUiState(
     val savedToHistory: Boolean = false,
     val saveError: String? = null,
     val isLoggedIn: Boolean = false,
+    /** The group is saved in the account, so it is changed there and not in the calculator. */
+    val isGroupSaved: Boolean = false,
+    /** The currency saved in the account; it is used for every income and changed only there. */
+    val savedCurrency: Currency? = null,
 )
 
 @OptIn(ExperimentalTime::class)
@@ -49,6 +55,7 @@ class CalculatorViewModel(
     private val taxHistory: TaxHistoryUseCase,
     private val authUseCase: AuthUseCase,
     private val dataStoreUseCase: DataStoreUseCase,
+    private val accountUseCase: AccountUseCase,
 ) : ViewModel() {
 
     private var nextRowId = 0
@@ -64,6 +71,22 @@ class CalculatorViewModel(
             authUseCase.isLoggedIn.collect { loggedIn ->
                 _state.update { it.copy(isLoggedIn = loggedIn, savedToHistory = false, saveError = null) }
             }
+        }
+        viewModelScope.launch {
+            combine(authUseCase.isLoggedIn, accountUseCase.savedGroup) { loggedIn, saved -> loggedIn && saved != null }
+                .collect { saved -> _state.update { it.copy(isGroupSaved = saved) } }
+        }
+        viewModelScope.launch {
+            combine(authUseCase.isLoggedIn, accountUseCase.savedCurrency) { loggedIn, saved -> saved.takeIf { loggedIn } }
+                .collect { saved ->
+                    _state.update { state ->
+                        state.copy(
+                            savedCurrency = saved,
+                            incomes = if (saved == null) state.incomes else state.incomes.map { it.copy(currency = saved) },
+                            result = null,
+                        )
+                    }
+                }
         }
         viewModelScope.launch {
             dataStoreUseCase.fopGroup.collect { group ->
@@ -89,7 +112,10 @@ class CalculatorViewModel(
         updateRow(id) { it.copy(amount = normalized, error = null) }
     }
 
-    fun onCurrencySelected(id: Int, currency: Currency) = updateRow(id) { it.copy(currency = currency) }
+    fun onCurrencySelected(id: Int, currency: Currency) {
+        if (_state.value.savedCurrency != null) return
+        updateRow(id) { it.copy(currency = currency) }
+    }
 
     fun addIncome() = _state.update { state ->
         state.copy(incomes = state.incomes + newRow(state.incomes.lastOrNull()?.currency ?: Currency.USD), result = null)

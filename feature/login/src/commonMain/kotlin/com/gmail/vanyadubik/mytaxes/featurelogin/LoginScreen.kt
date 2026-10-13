@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import com.gmail.vanyadubik.mytaxes.commonui.language.LanguageSwitchButton
 import com.gmail.vanyadubik.mytaxes.commonui.ui.components.button.AppButton
 import com.gmail.vanyadubik.mytaxes.commonui.ui.dialog.ErrorAppDialog
+import com.gmail.vanyadubik.mytaxes.commonui.ui.theme.ThemeAnimationHandler
 import com.gmail.vanyadubik.mytaxes.commonui.ui.theme.button.ThemeSwitchButton
 import com.gmail.vanyadubik.mytaxes.resource.Res
 import com.gmail.vanyadubik.mytaxes.resource.app_title
@@ -56,6 +57,31 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun LoginScreen(onBack: () -> Unit, viewModel: LoginViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsState()
+    LoginContent(
+        state = state,
+        themeAnimationHandler = viewModel.themeAnimationHandler,
+        onBack = onBack,
+        onEmailChanged = viewModel::onEmailChanged,
+        onPasswordChanged = viewModel::onPasswordChanged,
+        onSubmit = viewModel::submit,
+        onToggleMode = viewModel::toggleMode,
+    )
+
+    state.errorMessage?.let {
+        ErrorAppDialog(message = it, onDismiss = viewModel::dismissError)
+    }
+}
+
+@Composable
+private fun LoginContent(
+    state: LoginUiState,
+    themeAnimationHandler: ThemeAnimationHandler,
+    onBack: () -> Unit,
+    onEmailChanged: () -> Unit,
+    onPasswordChanged: () -> Unit,
+    onSubmit: (String, String) -> Unit,
+    onToggleMode: () -> Unit,
+) {
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
 
@@ -69,7 +95,7 @@ fun LoginScreen(onBack: () -> Unit, viewModel: LoginViewModel = koinViewModel())
         ) {
             LanguageSwitchButton()
             ThemeSwitchButton(
-                themeHandler = viewModel.themeAnimationHandler,
+                themeHandler = themeAnimationHandler,
                 iconModifier = Modifier.padding(8.dp),
                 iconSize = 24.dp,
             )
@@ -95,7 +121,7 @@ fun LoginScreen(onBack: () -> Unit, viewModel: LoginViewModel = koinViewModel())
             )
             OutlinedTextField(
                 value = email,
-                onValueChange = { email = it; viewModel.onEmailChanged() },
+                onValueChange = { email = it; onEmailChanged() },
                 label = { Text(stringResource(Res.string.email)) },
                 isError = state.emailError,
                 supportingText = if (state.emailError) {
@@ -107,7 +133,7 @@ fun LoginScreen(onBack: () -> Unit, viewModel: LoginViewModel = koinViewModel())
             )
             OutlinedTextField(
                 value = password,
-                onValueChange = { password = it; viewModel.onPasswordChanged() },
+                onValueChange = { password = it; onPasswordChanged() },
                 label = { Text(stringResource(Res.string.password)) },
                 isError = state.passwordError,
                 supportingText = if (state.passwordError) {
@@ -120,16 +146,12 @@ fun LoginScreen(onBack: () -> Unit, viewModel: LoginViewModel = koinViewModel())
             )
             AppButton(
                 text = stringResource(if (state.isRegister) Res.string.sign_up else Res.string.sign_in),
-                onClick = { viewModel.submit(email, password) },
+                onClick = { onSubmit(email, password) },
                 loadingMessage = if (state.isLoading) stringResource(Res.string.loading) else null,
             )
-            TextButton(onClick = viewModel::toggleMode) {
+            TextButton(onClick = onToggleMode) {
                 Text(stringResource(if (state.isRegister) Res.string.have_account else Res.string.no_account))
             }
         }
-    }
-
-    state.errorMessage?.let {
-        ErrorAppDialog(message = it, onDismiss = viewModel::dismissError)
     }
 }

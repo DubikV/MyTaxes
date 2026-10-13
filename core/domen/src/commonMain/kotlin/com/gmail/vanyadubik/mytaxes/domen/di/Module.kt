@@ -1,5 +1,6 @@
 package com.gmail.vanyadubik.mytaxes.domen.di
 
+import com.gmail.vanyadubik.mytaxes.domen.usecase.AccountUseCase
 import com.gmail.vanyadubik.mytaxes.domen.usecase.AuthUseCase
 import com.gmail.vanyadubik.mytaxes.domen.usecase.CalculateTaxUseCase
 import com.gmail.vanyadubik.mytaxes.domen.usecase.DataStoreUseCase
@@ -18,4 +19,5 @@ fun domenModule() = module {
     singleOf(::ExpenseUseCase)
     singleOf(::MonthlyStatsUseCase)
     singleOf(::PushNotificationUseCase)
+    singleOf(::AccountUseCase)
 }

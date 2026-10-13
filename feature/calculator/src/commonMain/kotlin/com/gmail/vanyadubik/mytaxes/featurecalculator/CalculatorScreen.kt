@@ -64,10 +64,14 @@ import com.gmail.vanyadubik.mytaxes.resource.calculate
 import com.gmail.vanyadubik.mytaxes.resource.calculator_title
 import com.gmail.vanyadubik.mytaxes.resource.cancel
 import com.gmail.vanyadubik.mytaxes.resource.currency
+import com.gmail.vanyadubik.mytaxes.resource.currency_change_in_account
 import com.gmail.vanyadubik.mytaxes.resource.date_required
 import com.gmail.vanyadubik.mytaxes.resource.annual_limit
 import com.gmail.vanyadubik.mytaxes.resource.fixed_tax_note
 import com.gmail.vanyadubik.mytaxes.resource.fop_group
+import com.gmail.vanyadubik.mytaxes.resource.fop_group_account_info_guest
+import com.gmail.vanyadubik.mytaxes.resource.fop_group_change_in_account
+import com.gmail.vanyadubik.mytaxes.resource.fop_group_account_info_signed_in
 import com.gmail.vanyadubik.mytaxes.resource.future_date_invalid
 import com.gmail.vanyadubik.mytaxes.resource.military_levy_fixed
 import com.gmail.vanyadubik.mytaxes.resource.single_tax_fixed
@@ -99,6 +103,36 @@ fun CalculatorScreen(
 ) {
     val state by viewModel.state.collectAsState()
 
+    CalculatorContent(
+        state = state,
+        onOpenLogin = onOpenLogin,
+        onGroupSelected = viewModel::onGroupSelected,
+        onDateSelected = viewModel::onDateSelected,
+        onAmountChanged = viewModel::onAmountChanged,
+        onCurrencySelected = viewModel::onCurrencySelected,
+        onAddIncome = viewModel::addIncome,
+        onRemoveIncome = viewModel::removeIncome,
+        onCalculate = viewModel::calculate,
+    )
+
+    state.errorMessage?.let {
+        ErrorAppDialog(message = it, onDismiss = viewModel::dismissError)
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun CalculatorContent(
+    state: CalculatorUiState,
+    onOpenLogin: () -> Unit,
+    onGroupSelected: (FopGroup) -> Unit,
+    onDateSelected: (Int, LocalDate) -> Unit,
+    onAmountChanged: (Int, String) -> Unit,
+    onCurrencySelected: (Int, Currency) -> Unit,
+    onAddIncome: () -> Unit,
+    onRemoveIncome: (Int) -> Unit,
+    onCalculate: () -> Unit,
+) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -120,36 +154,57 @@ fun CalculatorScreen(
                 modifier = Modifier.widthIn(max = 560.dp).fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
-                Text(stringResource(Res.string.fop_group), style = MaterialTheme.typography.labelLarge)
-                LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    items(FopGroup.entries) { group ->
-                        FilterChip(
-                            selected = group == state.group,
-                            onClick = { viewModel.onGroupSelected(group) },
-                            label = { Text(group.title()) },
-                        )
+                if (state.isGroupSaved) {
+                    Text(
+                        "${stringResource(Res.string.fop_group)}: ${state.group.title()}",
+                        style = MaterialTheme.typography.labelLarge,
+                    )
+                    Text(
+                        stringResource(Res.string.fop_group_change_in_account),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                } else {
+                    Text(stringResource(Res.string.fop_group), style = MaterialTheme.typography.labelLarge)
+                    LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        items(FopGroup.entries) { group ->
+                            FilterChip(
+                                selected = group == state.group,
+                                onClick = { onGroupSelected(group) },
+                                label = { Text(group.title()) },
+                            )
+                        }
                     }
+                    Text(
+                        stringResource(
+                            if (state.isLoggedIn) Res.string.fop_group_account_info_signed_in
+                            else Res.string.fop_group_account_info_guest
+                        ),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
                 }
                 state.incomes.forEachIndexed { index, row ->
                     IncomeCard(
                         number = index + 1,
                         row = row,
                         canRemove = state.incomes.size > 1,
-                        onDateSelected = { viewModel.onDateSelected(row.id, it) },
-                        onAmountChanged = { viewModel.onAmountChanged(row.id, it) },
-                        onCurrencySelected = { viewModel.onCurrencySelected(row.id, it) },
-                        onRemove = { viewModel.removeIncome(row.id) },
+                        currencyLocked = state.savedCurrency != null,
+                        onDateSelected = { onDateSelected(row.id, it) },
+                        onAmountChanged = { onAmountChanged(row.id, it) },
+                        onCurrencySelected = { onCurrencySelected(row.id, it) },
+                        onRemove = { onRemoveIncome(row.id) },
                     )
                 }
                 AppButton(
                     text = stringResource(Res.string.add_income),
-                    onClick = viewModel::addIncome,
+                    onClick = onAddIncome,
                     isOutlinedButton = true,
                     leftIcon = Icons.Default.Add,
                 )
                 AppButton(
                     text = stringResource(Res.string.calculate),
-                    onClick = viewModel::calculate,
+                    onClick = onCalculate,
                     loadingMessage = if (state.isLoading) stringResource(Res.string.loading) else null,
                 )
                 state.result?.let { ResultCard(it) }
@@ -175,10 +230,6 @@ fun CalculatorScreen(
             }
         }
     }
-
-    state.errorMessage?.let {
-        ErrorAppDialog(message = it, onDismiss = viewModel::dismissError)
-    }
 }
 
 @Composable
@@ -186,6 +237,7 @@ private fun IncomeCard(
     number: Int,
     row: IncomeRow,
     canRemove: Boolean,
+    currencyLocked: Boolean,
     onDateSelected: (LocalDate) -> Unit,
     onAmountChanged: (String) -> Unit,
     onCurrencySelected: (Currency) -> Unit,
@@ -228,13 +280,25 @@ private fun IncomeCard(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 modifier = Modifier.fillMaxWidth(),
             )
-            LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                items(Currency.entries) { currency ->
-                    FilterChip(
-                        selected = currency == row.currency,
-                        onClick = { onCurrencySelected(currency) },
-                        label = { Text(currency.code) },
-                    )
+            if (currencyLocked) {
+                Text(
+                    "${stringResource(Res.string.currency)}: ${row.currency.code}",
+                    style = MaterialTheme.typography.labelLarge,
+                )
+                Text(
+                    stringResource(Res.string.currency_change_in_account),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            } else {
+                LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    items(Currency.entries) { currency ->
+                        FilterChip(
+                            selected = currency == row.currency,
+                            onClick = { onCurrencySelected(currency) },
+                            label = { Text(currency.code) },
+                        )
+                    }
                 }
             }
         }

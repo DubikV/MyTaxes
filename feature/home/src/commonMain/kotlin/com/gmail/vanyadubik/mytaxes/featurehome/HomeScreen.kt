@@ -23,6 +23,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -38,8 +39,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LifecycleEventEffect
 import com.gmail.vanyadubik.mytaxes.commonui.ui.components.AppBarActions
 import com.gmail.vanyadubik.mytaxes.commonui.ui.components.button.AppButton
 import com.gmail.vanyadubik.mytaxes.commonui.ui.components.textfield.DateField
@@ -84,40 +83,13 @@ fun HomeScreen(
     val state by viewModel.state.collectAsState()
     var showAddExpense by remember { mutableStateOf(false) }
 
-    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { viewModel.load() }
-
-    Scaffold(
-        topBar = { TopAppBar(
-            title = { Text(stringResource(Res.string.home_title)) },
-            actions = { AppBarActions() },
-        ) }
-    ) { padding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .verticalScroll(rememberScrollState())
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Column(
-                modifier = Modifier.widthIn(max = 560.dp).fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-            ) {
-                if (!state.isLoggedIn) {
-                    Text(stringResource(Res.string.home_sign_in_prompt), style = MaterialTheme.typography.bodyLarge)
-                    AppButton(text = stringResource(Res.string.sign_in), onClick = onOpenLogin)
-                } else {
-                    ChartCard(state)
-                    ExpensesSection(
-                        expenses = state.expenses,
-                        onAdd = { showAddExpense = true },
-                        onDelete = viewModel::deleteExpense,
-                    )
-                }
-            }
-        }
-    }
+    HomeContent(
+        state = state,
+        onOpenLogin = onOpenLogin,
+        onRefresh = viewModel::load,
+        onAddExpense = { showAddExpense = true },
+        onDeleteExpense = viewModel::deleteExpense,
+    )
 
     if (showAddExpense) {
         AddExpenseDialog(
@@ -134,10 +106,61 @@ fun HomeScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun HomeContent(
+    state: HomeUiState,
+    onOpenLogin: () -> Unit,
+    onRefresh: () -> Unit,
+    onAddExpense: () -> Unit,
+    onDeleteExpense: (Expense) -> Unit,
+) {
+    Scaffold(
+        topBar = { TopAppBar(
+            title = { Text(stringResource(Res.string.home_title)) },
+            actions = { AppBarActions() },
+        ) }
+    ) { padding ->
+        PullToRefreshBox(
+            isRefreshing = state.isLoading,
+            onRefresh = onRefresh,
+            modifier = Modifier.fillMaxSize().padding(padding),
+        ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Column(
+                modifier = Modifier.widthIn(max = 560.dp).fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                if (!state.isLoggedIn) {
+                    Text(stringResource(Res.string.home_sign_in_prompt), style = MaterialTheme.typography.bodyLarge)
+                    AppButton(text = stringResource(Res.string.sign_in), onClick = onOpenLogin)
+                } else {
+                    ChartCard(state)
+                    ExpensesSection(
+                        expenses = state.expenses,
+                        onAdd = onAddExpense,
+                        onDelete = onDeleteExpense,
+                    )
+                }
+            }
+        }
+        }
+    }
+}
+
 @Composable
 private fun ChartCard(state: HomeUiState) {
     Card(modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Column(modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Text(stringResource(Res.string.chart_title), style = MaterialTheme.typography.titleMedium)
             Text(
                 stringResource(Res.string.chart_period, MonthlyStatsUseCase.DEFAULT_MONTHS),

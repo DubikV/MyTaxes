@@ -29,6 +29,7 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.feature.login)
             implementation(projects.feature.calculator)
+            implementation(projects.feature.account)
             implementation(projects.feature.history)
             implementation(projects.feature.home)
         }

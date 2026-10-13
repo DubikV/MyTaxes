@@ -21,6 +21,13 @@ function nowIn(timeZone) {
   return { y, m, d, hour };
 }
 
+// Start of the given day in [timeZone] as epoch millis (the offset is taken near that instant)
+function startOfDay({ y, m, d }, timeZone) {
+  const utc = Date.UTC(y, m - 1, d);
+  const local = Date.parse(`${new Date(utc).toLocaleString("en-US", { timeZone, hour12: false })} UTC`);
+  return utc - (local - utc);
+}
+
 async function main() {
   initializeApp({ credential: cert(JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT)) });
   const db = getFirestore();
@@ -38,10 +45,23 @@ async function main() {
   const devices = await db.collectionGroup("devices").get();
   const messages = [];
   const owners = [];
-  devices.forEach((doc) => {
+  // Calculating the taxes counts as paying them: skip the deadlines the user has already calculated
+  const lastCalculation = new Map();
+  const lastCalculationAt = async (uid) => {
+    if (!lastCalculation.has(uid)) {
+      const latest = await db.collection(`users/${uid}/calculations`).orderBy("createdAt", "desc").limit(1).get();
+      lastCalculation.set(uid, latest.empty ? 0 : Number(latest.docs[0].get("createdAt")) || 0);
+    }
+    return lastCalculation.get(uid);
+  };
+
+  for (const doc of devices.docs) {
     const { group, language } = doc.data();
-    const reminders = remindersFor(today, group);
-    if (reminders.length === 0) return;
+    const due = remindersFor(today, group);
+    if (due.length === 0) continue;
+    const lastAt = await lastCalculationAt(doc.ref.parent.parent.id);
+    const reminders = due.filter((r) => lastAt < startOfDay(r.paidSince, TIME_ZONE));
+    if (reminders.length === 0) continue;
     const { title, body } = messageFor(reminders, language);
     messages.push({
       token: doc.id,
@@ -51,7 +71,7 @@ async function main() {
       apns: { headers: { "apns-priority": "10" }, payload: { aps: { sound: "default" } } },
     });
     owners.push(doc.ref);
-  });
+  }
 
   const messaging = getMessaging();
   for (let i = 0; i < messages.length; i += 500) {

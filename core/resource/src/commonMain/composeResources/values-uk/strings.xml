@@ -77,4 +77,24 @@
     <string name="expense_note">Примітка (необов’язково)</string>
     <string name="expenses_empty">Витрат ще немає</string>
     <string name="save">Зберегти</string>
+    <string name="nav_account">Акаунт</string>
+    <string name="account_title">Акаунт</string>
+    <string name="account_group_title">Група ФОП</string>
+    <string name="account_group_hint">Натисніть на групу, щоб зберегти її в акаунті, і ще раз, щоб зняти. Збережена група обирається автоматично після входу.</string>
+    <string name="account_group_none">Групу не збережено</string>
+    <string name="account_currency_title">Валюта</string>
+    <string name="account_currency_hint">Натисніть на валюту, щоб зберегти її в акаунті, і ще раз, щоб зняти. Збережена валюта використовується для всіх доходів у калькуляторі.</string>
+    <string name="account_currency_none">Валюту не збережено</string>
+    <string name="currency_change_in_account">Валюту збережено в акаунті. Змінити її можна у розділі «Акаунт».</string>
+    <string name="fop_group_account_info_signed_in">Збережіть свою групу у вкладці «Акаунт», щоб вона обиралася автоматично.</string>
+    <string name="fop_group_account_info_guest">Увійдіть, щоб зберегти групу в акаунті.</string>
+    <string name="delete_account">Видалити акаунт</string>
+    <string name="delete_account_title">Видалити акаунт?</string>
+    <string name="delete_account_message">Ваш акаунт, історію розрахунків і витрати буде видалено назавжди. Цю дію неможливо скасувати.</string>
+    <string name="delete_account_confirm">Так, видалити</string>
+    <string name="deleting">Видалення…</string>
+    <string name="delete_history_title">Видалити запис?</string>
+    <string name="delete_history_message">Цей розрахунок буде назавжди видалено з історії.</string>
+    <string name="delete_history_confirm">Так, видалити</string>
+    <string name="fop_group_change_in_account">Групу збережено в акаунті. Змінити її можна у розділі «Акаунт».</string>
 </resources>

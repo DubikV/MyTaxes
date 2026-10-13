@@ -50,11 +50,12 @@ class HomeViewModel(
                 _state.update {
                     if (loggedIn) it.copy(isLoggedIn = true) else HomeUiState()
                 }
+                if (loggedIn) load()
             }
         }
     }
 
-    /** Reloads the data, called every time the screen is shown. */
+    /** Loads the data when the user signs in and on pull-to-refresh. */
     fun load() {
         if (!_state.value.isLoggedIn) return
         _state.update { it.copy(isLoading = true, errorMessage = null) }

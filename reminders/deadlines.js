@@ -26,6 +26,14 @@ function ruleDay(rule, month) {
 }
 
 
+// A calculation made since this day counts as the payment of the deadline: after the end of the paid period
+// (the month itself for the monthly tax, the quarter that ended in the previous month for the others).
+function paidSince(rule, year, month) {
+  if (rule.kind === "monthlyTax" || rule.kind === "esv") return { y: year, m: month, d: 1 };
+  const index = year * 12 + (month - 1) - 1;
+  return { y: Math.floor(index / 12), m: (index % 12) + 1, d: 1 };
+}
+
 function moveOffWeekend({ y, m, d }) {
   const weekday = new Date(Date.UTC(y, m - 1, d)).getUTCDay(); // 0 = Sunday, 6 = Saturday
   const shifted = new Date(Date.UTC(y, m - 1, d + (weekday === 6 ? 2 : weekday === 0 ? 1 : 0)));
@@ -38,7 +46,7 @@ function daysBetween(from, to) {
 
 /**
  * Returns the reminders due on [today] ({y, m, d}) for [group]:
- * [{ kind, daysLeft }], daysLeft is one of REMINDER_OFFSETS.
+ * [{ kind, daysLeft, paidSince }], daysLeft is one of REMINDER_OFFSETS, paidSince is {y, m, d}.
  */
 function remindersFor(today, group) {
   const result = [];
@@ -52,7 +60,7 @@ function remindersFor(today, group) {
       if (rule.months !== "all" && !rule.months.includes(month)) continue;
       const deadline = moveOffWeekend({ y: year, m: month, d: ruleDay(rule, month) });
       const daysLeft = daysBetween(today, deadline);
-      if (REMINDER_OFFSETS.includes(daysLeft)) result.push({ kind: rule.kind, daysLeft });
+      if (REMINDER_OFFSETS.includes(daysLeft)) result.push({ kind: rule.kind, daysLeft, paidSince: paidSince(rule, year, month) });
     }
   }
   return result;

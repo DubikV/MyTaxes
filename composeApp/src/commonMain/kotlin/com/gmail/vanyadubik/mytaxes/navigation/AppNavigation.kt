@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Login
-import androidx.compose.material.icons.automirrored.filled.Logout
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Calculate
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Home
@@ -26,13 +26,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.gmail.vanyadubik.mytaxes.featureaccount.AccountScreen
 import com.gmail.vanyadubik.mytaxes.featurecalculator.CalculatorScreen
 import com.gmail.vanyadubik.mytaxes.featurehistory.HistoryScreen
 import com.gmail.vanyadubik.mytaxes.featurehome.HomeScreen
 import com.gmail.vanyadubik.mytaxes.featurelogin.LoginScreen
 import com.gmail.vanyadubik.mytaxes.resource.Res
 import com.gmail.vanyadubik.mytaxes.resource.history
-import com.gmail.vanyadubik.mytaxes.resource.logout
+import com.gmail.vanyadubik.mytaxes.resource.nav_account
 import com.gmail.vanyadubik.mytaxes.resource.nav_calculator
 import com.gmail.vanyadubik.mytaxes.resource.nav_home
 import com.gmail.vanyadubik.mytaxes.resource.sign_in
@@ -44,6 +45,7 @@ sealed class AppScreen(val route: String) {
     data object Home : AppScreen("home")
     data object Calculator : AppScreen("calculator")
     data object History : AppScreen("history")
+    data object Account : AppScreen("account")
 }
 
 @Composable
@@ -60,8 +62,11 @@ fun AppNavigation(viewModel: MainViewModel) {
         val route = navController.currentDestination?.route
         if (loggedIn && route == AppScreen.Login.route) {
             navController.popBackStack()
-        } else if (!loggedIn && route == AppScreen.History.route) {
-            navController.navigateToTab(AppScreen.Home)
+        } else if (!loggedIn && (route == AppScreen.History.route || route == AppScreen.Account.route)) {
+            // Do not keep the state of the signed out user's tabs
+            navController.navigate(AppScreen.Home.route) {
+                popUpTo(AppScreen.Home.route) { inclusive = true }
+            }
         }
     }
 
@@ -91,17 +96,18 @@ fun AppNavigation(viewModel: MainViewModel) {
                         )
                     }
                     NavigationBarItem(
-                        selected = false,
+                        selected = currentDestination.isIn(AppScreen.Account),
                         onClick = {
-                            if (loggedIn) viewModel.logout() else navController.navigate(AppScreen.Login.route)
+                            if (loggedIn) navController.navigateToTab(AppScreen.Account)
+                            else navController.navigate(AppScreen.Login.route)
                         },
                         icon = {
                             Icon(
-                                if (loggedIn) Icons.AutoMirrored.Filled.Logout else Icons.AutoMirrored.Filled.Login,
+                                if (loggedIn) Icons.Default.AccountCircle else Icons.AutoMirrored.Filled.Login,
                                 contentDescription = null,
                             )
                         },
-                        label = { Text(stringResource(if (loggedIn) Res.string.logout else Res.string.sign_in)) },
+                        label = { Text(stringResource(if (loggedIn) Res.string.nav_account else Res.string.sign_in)) },
                     )
                 }
             }
@@ -125,6 +131,9 @@ fun AppNavigation(viewModel: MainViewModel) {
             }
             composable(AppScreen.History.route) {
                 HistoryScreen()
+            }
+            composable(AppScreen.Account.route) {
+                AccountScreen()
             }
         }
     }

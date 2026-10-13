@@ -6,6 +6,7 @@ import com.gmail.vanyadubik.mytaxes.commonui.di.commonUiModule
 import com.gmail.vanyadubik.mytaxes.commonui.di.commonUiPlatformModule
 import com.gmail.vanyadubik.mytaxes.datastore.di.dataStoreModule
 import com.gmail.vanyadubik.mytaxes.domen.di.domenModule
+import com.gmail.vanyadubik.mytaxes.featureaccount.di.featureAccountModule
 import com.gmail.vanyadubik.mytaxes.featurecalculator.di.featureCalculatorModule
 import com.gmail.vanyadubik.mytaxes.featurehistory.di.featureHistoryModule
 import com.gmail.vanyadubik.mytaxes.featurehome.di.featureHomeModule
@@ -50,6 +51,7 @@ public fun initKoin(
                 ),
                 featureLoginModule(),
                 featureCalculatorModule(),
+                featureAccountModule(),
                 featureHistoryModule(),
                 featureHomeModule(),
                 platformModule(),

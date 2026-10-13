@@ -9,6 +9,7 @@ import com.gmail.vanyadubik.mytaxes.network.FirebaseConfig
 import com.gmail.vanyadubik.mytaxes.network.apiCall
 import com.gmail.vanyadubik.mytaxes.network.bodyOrThrow
 import com.gmail.vanyadubik.mytaxes.network.dto.AuthResponse
+import com.gmail.vanyadubik.mytaxes.network.dto.DeleteAccountRequest
 import com.gmail.vanyadubik.mytaxes.network.dto.EmailPasswordRequest
 import com.gmail.vanyadubik.mytaxes.network.dto.RefreshResponse
 import io.ktor.client.HttpClient
@@ -63,6 +64,15 @@ class AuthRepositoryImpl(
         )
     }
 
+    override suspend fun deleteAccount(idToken: String): ResultState<Unit> = apiCall {
+        httpClient.post("$IDENTITY_URL/accounts:delete") {
+            parameter("key", config.apiKey)
+            contentType(ContentType.Application.Json)
+            setBody(json.encodeToString(DeleteAccountRequest.serializer(), DeleteAccountRequest(idToken)))
+        }.bodyOrThrow(json) { code -> ApiException(message = mapAuthError(code)) }
+        Unit
+    }
+
     private suspend fun authenticate(path: String, email: String, password: String): ResultState<AuthSession> =
         apiCall {
             val text = httpClient.post("$IDENTITY_URL/$path") {
@@ -91,6 +101,7 @@ class AuthRepositoryImpl(
             code.startsWith("EMAIL_NOT_FOUND") -> "Wrong email or password"
         code.startsWith("INVALID_EMAIL") -> "Invalid email address"
         code.startsWith("WEAK_PASSWORD") -> "Password must be at least 6 characters"
+        code.startsWith("CREDENTIAL_TOO_OLD_LOGIN_AGAIN") || code.startsWith("TOKEN_EXPIRED") -> "Please sign in again to delete the account"
         code.startsWith("USER_DISABLED") -> "This account has been disabled"
         code.startsWith("TOO_MANY_ATTEMPTS") -> "Too many attempts. Try again later"
         code.startsWith("API_KEY") || code.contains("API key") -> "Invalid Firebase API key. Check FirebaseSettings"

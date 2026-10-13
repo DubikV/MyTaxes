@@ -77,4 +77,24 @@
     <string name="expense_note">Note (optional)</string>
     <string name="expenses_empty">No expenses yet</string>
     <string name="save">Save</string>
+    <string name="nav_account">Account</string>
+    <string name="account_title">Account</string>
+    <string name="account_group_title">FOP group</string>
+    <string name="account_group_hint">Tap a group to save it in your account, tap it again to remove it. The saved group is selected automatically after you sign in.</string>
+    <string name="account_group_none">No group saved</string>
+    <string name="account_currency_title">Currency</string>
+    <string name="account_currency_hint">Tap a currency to save it in your account, tap it again to remove it. The saved currency is used for all incomes in the calculator.</string>
+    <string name="account_currency_none">No currency saved</string>
+    <string name="currency_change_in_account">The currency is saved in your account. You can change it in the Account tab.</string>
+    <string name="fop_group_account_info_signed_in">You can save your group in the Account tab so it is selected automatically.</string>
+    <string name="fop_group_account_info_guest">Sign in to save your group in your account.</string>
+    <string name="delete_account">Delete account</string>
+    <string name="delete_account_title">Delete account?</string>
+    <string name="delete_account_message">Your account, calculation history and expenses will be deleted permanently. This cannot be undone.</string>
+    <string name="delete_account_confirm">Yes, delete</string>
+    <string name="deleting">Deleting…</string>
+    <string name="delete_history_title">Delete record?</string>
+    <string name="delete_history_message">This calculation will be removed from your history permanently.</string>
+    <string name="delete_history_confirm">Yes, delete</string>
+    <string name="fop_group_change_in_account">The group is saved in your account. You can change it in the Account tab.</string>
 </resources>

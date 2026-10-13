@@ -26,3 +26,6 @@ data class RefreshResponse(
     @SerialName("expires_in") val expiresIn: String,
     @SerialName("user_id") val userId: String,
 )
+
+@Serializable
+data class DeleteAccountRequest(val idToken: String)

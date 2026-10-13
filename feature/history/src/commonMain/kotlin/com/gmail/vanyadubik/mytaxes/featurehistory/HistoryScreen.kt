@@ -25,6 +25,9 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -32,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import com.gmail.vanyadubik.mytaxes.commonui.ui.components.AppBarActions
+import com.gmail.vanyadubik.mytaxes.commonui.ui.dialog.ConfirmBottomSheet
 import com.gmail.vanyadubik.mytaxes.commonui.ui.dialog.ErrorAppDialog
 import com.gmail.vanyadubik.mytaxes.commonui.utils.formatDate
 import com.gmail.vanyadubik.mytaxes.commonui.utils.formatNumber
@@ -39,6 +43,9 @@ import com.gmail.vanyadubik.mytaxes.commonui.utils.title
 import com.gmail.vanyadubik.mytaxes.domen.model.TaxCalculation
 import com.gmail.vanyadubik.mytaxes.resource.Res
 import com.gmail.vanyadubik.mytaxes.resource.delete
+import com.gmail.vanyadubik.mytaxes.resource.delete_history_confirm
+import com.gmail.vanyadubik.mytaxes.resource.delete_history_message
+import com.gmail.vanyadubik.mytaxes.resource.delete_history_title
 import com.gmail.vanyadubik.mytaxes.resource.history
 import com.gmail.vanyadubik.mytaxes.resource.history_empty
 import com.gmail.vanyadubik.mytaxes.resource.total_tax
@@ -51,16 +58,48 @@ fun HistoryScreen(
     viewModel: HistoryViewModel = koinViewModel(),
 ) {
     val state by viewModel.state.collectAsState()
+    var itemToDelete by remember { mutableStateOf<TaxCalculation?>(null) }
 
     // The tab keeps its ViewModel between visits, so reload to pick up new calculations
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { viewModel.load() }
 
+    HistoryContent(
+        state = state,
+        onRefresh = viewModel::load,
+        onDelete = { itemToDelete = it },
+    )
+
+    itemToDelete?.let { item ->
+        ConfirmBottomSheet(
+            title = stringResource(Res.string.delete_history_title),
+            message = stringResource(Res.string.delete_history_message),
+            confirmText = stringResource(Res.string.delete_history_confirm),
+            onConfirm = {
+                viewModel.delete(item)
+                itemToDelete = null
+            },
+            onDismiss = { itemToDelete = null },
+        )
+    }
+
+    state.errorMessage?.let {
+        ErrorAppDialog(message = it, onDismiss = viewModel::dismissError)
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun HistoryContent(
+    state: HistoryUiState,
+    onRefresh: () -> Unit,
+    onDelete: (TaxCalculation) -> Unit,
+) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(Res.string.history)) },
                 actions = {
-                    IconButton(onClick = viewModel::load) {
+                    IconButton(onClick = onRefresh) {
                         Icon(Icons.Default.Refresh, contentDescription = null)
                     }
                     AppBarActions()
@@ -81,15 +120,11 @@ fun HistoryScreen(
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
                     items(state.items, key = { it.id ?: it.hashCode() }) { item ->
-                        HistoryItem(item, onDelete = { viewModel.delete(item) })
+                        HistoryItem(item, onDelete = { onDelete(item) })
                     }
                 }
             }
         }
-    }
-
-    state.errorMessage?.let {
-        ErrorAppDialog(message = it, onDismiss = viewModel::dismissError)
     }
 }
 
