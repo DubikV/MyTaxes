@@ -1,11 +1,11 @@
-package com.gmail.vanyadubik.mytaxes.commonui.ui.theme
+package com.gmail.vanyadubik.myassistant.commonui.ui.theme
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.rememberGraphicsLayer
-import com.gmail.vanyadubik.mytaxes.commonui.utils.isDark
-import com.gmail.vanyadubik.mytaxes.domen.model.AppTheme
+import com.gmail.vanyadubik.myassistant.commonui.utils.isDark
+import com.gmail.vanyadubik.myassistant.domen.model.AppTheme
 
 /**
  * A composable scope that enables theme animations for its content.

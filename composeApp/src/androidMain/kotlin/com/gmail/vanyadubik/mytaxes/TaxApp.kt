@@ -1,9 +1,9 @@
-package com.gmail.vanyadubik.mytaxes
+package com.gmail.vanyadubik.myassistant
 
 import android.app.Application
-import com.gmail.vanyadubik.mytaxes.di.firebaseAndroidOptions
-import com.gmail.vanyadubik.mytaxes.di.initKoin
-import com.gmail.vanyadubik.mytaxes.push.createReminderChannel
+import com.gmail.vanyadubik.myassistant.di.firebaseAndroidOptions
+import com.gmail.vanyadubik.myassistant.di.initKoin
+import com.gmail.vanyadubik.myassistant.push.createReminderChannel
 import com.google.firebase.FirebaseApp
 import org.koin.android.ext.koin.androidContext
 

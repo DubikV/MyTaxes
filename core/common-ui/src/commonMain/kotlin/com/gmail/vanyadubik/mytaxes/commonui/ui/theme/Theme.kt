@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes.commonui.ui.theme
+package com.gmail.vanyadubik.myassistant.commonui.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -6,9 +6,9 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import com.gmail.vanyadubik.mytaxes.commonui.ui.LocalIsDarkTheme
-import com.gmail.vanyadubik.mytaxes.domen.model.AppTheme
-import com.gmail.vanyadubik.mytaxes.resource.AppColors
+import com.gmail.vanyadubik.myassistant.commonui.ui.LocalIsDarkTheme
+import com.gmail.vanyadubik.myassistant.domen.model.AppTheme
+import com.gmail.vanyadubik.myassistant.resource.AppColors
 
 
 private val lightScheme = lightColorScheme(

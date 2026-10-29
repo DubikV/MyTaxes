@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes.commonui.ui.theme.button
+package com.gmail.vanyadubik.myassistant.commonui.ui.theme.button
 
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -7,8 +7,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.gmail.vanyadubik.mytaxes.commonui.ui.theme.ThemeAnimationHandler
-import com.gmail.vanyadubik.mytaxes.commonui.utils.isDark
+import com.gmail.vanyadubik.myassistant.commonui.ui.theme.ThemeAnimationHandler
+import com.gmail.vanyadubik.myassistant.commonui.utils.isDark
 import kotlin.jvm.JvmInline
 
 /**

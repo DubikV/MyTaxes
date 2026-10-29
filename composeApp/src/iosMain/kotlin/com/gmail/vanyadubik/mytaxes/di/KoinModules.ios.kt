@@ -1,6 +1,6 @@
-package com.gmail.vanyadubik.mytaxes.di
+package com.gmail.vanyadubik.myassistant.di
 
-import com.gmail.vanyadubik.mytaxes.domen.repository.PushTokenProvider
+import com.gmail.vanyadubik.myassistant.domen.repository.PushTokenProvider
 import org.koin.dsl.module
 import platform.Foundation.NSLocale
 import platform.Foundation.preferredLanguages

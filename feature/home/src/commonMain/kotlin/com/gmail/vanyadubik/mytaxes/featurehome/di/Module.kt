@@ -1,6 +1,6 @@
-package com.gmail.vanyadubik.mytaxes.featurehome.di
+package com.gmail.vanyadubik.myassistant.featurehome.di
 
-import com.gmail.vanyadubik.mytaxes.featurehome.HomeViewModel
+import com.gmail.vanyadubik.myassistant.featurehome.HomeViewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 

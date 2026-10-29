@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes.common
+package com.gmail.vanyadubik.myassistant.common
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect

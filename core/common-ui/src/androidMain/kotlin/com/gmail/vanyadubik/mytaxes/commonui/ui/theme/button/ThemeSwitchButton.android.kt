@@ -1,9 +1,9 @@
-package com.gmail.vanyadubik.mytaxes.commonui.ui.theme.button
+package com.gmail.vanyadubik.myassistant.commonui.ui.theme.button
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
-import com.gmail.vanyadubik.mytaxes.commonui.ui.theme.ThemeAnimationHandler
+import com.gmail.vanyadubik.myassistant.commonui.ui.theme.ThemeAnimationHandler
 
 internal actual fun Modifier.themeAnimationTarget(
     state: ThemeAnimationHandler,

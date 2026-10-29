@@ -1,9 +1,9 @@
-package com.gmail.vanyadubik.mytaxes.domen.usecase
+package com.gmail.vanyadubik.myassistant.domen.usecase
 
-import com.gmail.vanyadubik.mytaxes.domen.model.Currency
-import com.gmail.vanyadubik.mytaxes.domen.model.Expense
-import com.gmail.vanyadubik.mytaxes.domen.model.IncomeItem
-import com.gmail.vanyadubik.mytaxes.domen.model.TaxCalculation
+import com.gmail.vanyadubik.myassistant.domen.model.Currency
+import com.gmail.vanyadubik.myassistant.domen.model.Expense
+import com.gmail.vanyadubik.myassistant.domen.model.IncomeItem
+import com.gmail.vanyadubik.myassistant.domen.model.TaxCalculation
 import kotlinx.datetime.LocalDate
 import kotlin.test.Test
 import kotlin.test.assertEquals

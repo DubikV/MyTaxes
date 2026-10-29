@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes
+package com.gmail.vanyadubik.myassistant
 
 import androidx.compose.ui.window.ComposeUIViewController
 

@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes.common.logger
+package com.gmail.vanyadubik.myassistant.common.logger
 
 // iosMain/kotlin/AppLogger.kt
 
@@ -37,7 +37,7 @@ actual class AppLogger actual constructor(private val tag: String) {
 
         NSLog(fullMessage)
 
-        // Можно добавить вывод исключения, если необходимо:
+        // Можно добавить вывод исключения, overlay:
         // if (throwable != null) {
         //     NSLog("Exception details: ${throwable.getStackTrace()}")
         // }

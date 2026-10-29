@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes.datastore.utils
+package com.gmail.vanyadubik.myassistant.datastore.utils
 
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.doublePreferencesKey
@@ -7,7 +7,7 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
-import com.gmail.vanyadubik.mytaxes.domen.model.PreferenceKey
+import com.gmail.vanyadubik.myassistant.domen.model.PreferenceKey
 import kotlin.reflect.typeOf
 
 fun PreferenceKey<*>.toStoreKey() = when (type) {

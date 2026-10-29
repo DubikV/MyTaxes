@@ -1,7 +1,7 @@
-package com.gmail.vanyadubik.mytaxes.domen.repository
+package com.gmail.vanyadubik.myassistant.domen.repository
 
-import com.gmail.vanyadubik.mytaxes.domen.model.PushDevice
-import com.gmail.vanyadubik.mytaxes.domen.model.ResultState
+import com.gmail.vanyadubik.myassistant.domen.model.PushDevice
+import com.gmail.vanyadubik.myassistant.domen.model.ResultState
 
 interface DeviceRepository {
     suspend fun register(userId: String, idToken: String, device: PushDevice): ResultState<Unit>

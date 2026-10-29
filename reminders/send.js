@@ -3,7 +3,7 @@
 const { initializeApp, cert } = require("firebase-admin/app");
 const { getFirestore } = require("firebase-admin/firestore");
 const { getMessaging } = require("firebase-admin/messaging");
-const { remindersFor, messageFor } = require("./deadlines");
+const { remindersFor, monthlyRemindersFor, isLastDayOfMonth, messageFor } = require("./deadlines");
 
 const TIME_ZONE = "Europe/Kyiv";
 const SEND_FROM_HOUR = 9;
@@ -35,7 +35,7 @@ async function main() {
   const dateKey = `${today.y}-${today.m}-${today.d}`;
   const force = process.env.FORCE === "true" || Boolean(process.env.TEST_DATE);
 
-  // The workflow is scheduled twice (summer / winter time) and GitHub may delay runs: send once per day
+  // The workflow is scheduled twice (summer / winter time) and GitHub May delay runs: send once per day
   const marker = db.doc("meta/reminders");
   if (!force) {
     if (today.hour < SEND_FROM_HOUR) return console.log(`Too early in ${TIME_ZONE} (${today.hour}h), skipping`);
@@ -56,13 +56,24 @@ async function main() {
   };
 
   for (const doc of devices.docs) {
-    const { group, language } = doc.data();
-    const due = remindersFor(today, group);
+    const { group, language, taxReminderMode } = doc.data();
+    const mode = taxReminderMode || "as_needed";
+    let due = [];
+    let isMonthly = false;
+
+    if (mode === "monthly") {
+      if (!isLastDayOfMonth(today)) continue;
+      due = monthlyRemindersFor(today, group);
+      isMonthly = true;
+    } else {
+      due = remindersFor(today, group);
+    }
+
     if (due.length === 0) continue;
     const lastAt = await lastCalculationAt(doc.ref.parent.parent.id);
     const reminders = due.filter((r) => lastAt < startOfDay(r.paidSince, TIME_ZONE));
     if (reminders.length === 0) continue;
-    const { title, body } = messageFor(reminders, language);
+    const { title, body } = messageFor(reminders, language, isMonthly);
     messages.push({
       token: doc.id,
       notification: { title, body },

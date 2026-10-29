@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes.network.dto
+package com.gmail.vanyadubik.myassistant.network.dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

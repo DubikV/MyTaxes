@@ -1,11 +1,11 @@
-package com.gmail.vanyadubik.mytaxes.commonui.language
+package com.gmail.vanyadubik.myassistant.commonui.language
 
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import com.gmail.vanyadubik.mytaxes.domen.model.AppLanguage
-import com.gmail.vanyadubik.mytaxes.domen.usecase.DataStoreUseCase
+import com.gmail.vanyadubik.myassistant.domen.model.AppLanguage
+import com.gmail.vanyadubik.myassistant.domen.usecase.DataStoreUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 

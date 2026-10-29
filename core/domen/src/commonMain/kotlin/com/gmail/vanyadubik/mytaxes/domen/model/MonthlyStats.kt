@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes.domen.model
+package com.gmail.vanyadubik.myassistant.domen.model
 
 /** Incomes, taxes and expenses (all in UAH) of one calendar month. */
 data class MonthlyStats(

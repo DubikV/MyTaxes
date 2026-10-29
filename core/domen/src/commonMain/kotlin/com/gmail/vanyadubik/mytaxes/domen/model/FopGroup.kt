@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes.domen.model
+package com.gmail.vanyadubik.myassistant.domen.model
 
 /**
  * Single tax groups of an individual entrepreneur (FOP) in Ukraine.

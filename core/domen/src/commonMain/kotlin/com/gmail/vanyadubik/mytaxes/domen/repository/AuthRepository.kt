@@ -1,7 +1,7 @@
-package com.gmail.vanyadubik.mytaxes.domen.repository
+package com.gmail.vanyadubik.myassistant.domen.repository
 
-import com.gmail.vanyadubik.mytaxes.domen.model.AuthSession
-import com.gmail.vanyadubik.mytaxes.domen.model.ResultState
+import com.gmail.vanyadubik.myassistant.domen.model.AuthSession
+import com.gmail.vanyadubik.myassistant.domen.model.ResultState
 
 interface AuthRepository {
     suspend fun signIn(email: String, password: String): ResultState<AuthSession>

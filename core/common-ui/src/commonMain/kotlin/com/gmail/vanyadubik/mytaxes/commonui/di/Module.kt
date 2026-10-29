@@ -1,9 +1,9 @@
-package com.gmail.vanyadubik.mytaxes.commonui.di
+package com.gmail.vanyadubik.myassistant.commonui.di
 
 import androidx.compose.animation.core.tween
-import com.gmail.vanyadubik.mytaxes.commonui.language.LanguageHandler
-import com.gmail.vanyadubik.mytaxes.commonui.ui.theme.ThemeAnimationFormat
-import com.gmail.vanyadubik.mytaxes.commonui.ui.theme.ThemeAnimationHandler
+import com.gmail.vanyadubik.myassistant.commonui.language.LanguageHandler
+import com.gmail.vanyadubik.myassistant.commonui.ui.theme.ThemeAnimationFormat
+import com.gmail.vanyadubik.myassistant.commonui.ui.theme.ThemeAnimationHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

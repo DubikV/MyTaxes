@@ -39,7 +39,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.gmail.vanyadubik.mytaxes.featurehome"
+    namespace = "com.gmail.vanyadubik.myassistant.featurehome"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()

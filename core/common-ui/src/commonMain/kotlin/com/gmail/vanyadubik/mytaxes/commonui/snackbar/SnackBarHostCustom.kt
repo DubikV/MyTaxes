@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes.commonui.snackbar
+package com.gmail.vanyadubik.myassistant.commonui.snackbar
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Snackbar

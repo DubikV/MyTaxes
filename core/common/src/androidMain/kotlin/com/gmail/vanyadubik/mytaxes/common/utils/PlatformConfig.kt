@@ -1,9 +1,9 @@
-package com.gmail.vanyadubik.mytaxes.common.utils
+package com.gmail.vanyadubik.myassistant.common.utils
 
 import android.content.res.Configuration
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalConfiguration
-import com.gmail.vanyadubik.mytaxes.common.BuildConfig
+import com.gmail.vanyadubik.myassistant.common.BuildConfig
 
 actual object PlatformConfig {
 

@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes.commonui.di
+package com.gmail.vanyadubik.myassistant.commonui.di
 
 import org.koin.dsl.module
 import androidx.compose.runtime.Composable

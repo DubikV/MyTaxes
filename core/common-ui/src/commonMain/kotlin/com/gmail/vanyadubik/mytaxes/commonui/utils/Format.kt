@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes.commonui.utils
+package com.gmail.vanyadubik.myassistant.commonui.utils
 
 import kotlinx.datetime.LocalDate
 import kotlin.math.abs

@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes.common.utils
+package com.gmail.vanyadubik.myassistant.common.utils
 
 fun String?.capitalizeFirstLetter() = if (this.isNullOrEmpty()) {
     this

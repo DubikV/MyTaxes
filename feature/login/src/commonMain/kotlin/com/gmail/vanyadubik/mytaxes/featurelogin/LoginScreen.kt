@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes.featurelogin
+package com.gmail.vanyadubik.myassistant.featurelogin
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -32,25 +32,31 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import com.gmail.vanyadubik.mytaxes.commonui.language.LanguageSwitchButton
-import com.gmail.vanyadubik.mytaxes.commonui.ui.components.button.AppButton
-import com.gmail.vanyadubik.mytaxes.commonui.ui.dialog.ErrorAppDialog
-import com.gmail.vanyadubik.mytaxes.commonui.ui.theme.ThemeAnimationHandler
-import com.gmail.vanyadubik.mytaxes.commonui.ui.theme.button.ThemeSwitchButton
-import com.gmail.vanyadubik.mytaxes.resource.Res
-import com.gmail.vanyadubik.mytaxes.resource.app_title
-import com.gmail.vanyadubik.mytaxes.resource.email
-import com.gmail.vanyadubik.mytaxes.resource.email_empty
-import com.gmail.vanyadubik.mytaxes.resource.have_account
-import com.gmail.vanyadubik.mytaxes.resource.loading
-import com.gmail.vanyadubik.mytaxes.resource.login_title
-import com.gmail.vanyadubik.mytaxes.resource.no_account
-import com.gmail.vanyadubik.mytaxes.resource.password
-import com.gmail.vanyadubik.mytaxes.resource.password_empty
-import com.gmail.vanyadubik.mytaxes.resource.back
-import com.gmail.vanyadubik.mytaxes.resource.register_title
-import com.gmail.vanyadubik.mytaxes.resource.sign_in
-import com.gmail.vanyadubik.mytaxes.resource.sign_up
+import com.gmail.vanyadubik.myassistant.commonui.language.LanguageSwitchButton
+import com.gmail.vanyadubik.myassistant.commonui.ui.components.button.AppButton
+import com.gmail.vanyadubik.myassistant.commonui.ui.dialog.ConfirmBottomSheet
+import com.gmail.vanyadubik.myassistant.commonui.ui.dialog.ErrorAppDialog
+import com.gmail.vanyadubik.myassistant.commonui.ui.theme.ThemeAnimationHandler
+import com.gmail.vanyadubik.myassistant.commonui.ui.theme.button.ThemeSwitchButton
+import com.gmail.vanyadubik.myassistant.featurelogin.model.LoginUiState
+import com.gmail.vanyadubik.myassistant.resource.Res
+import com.gmail.vanyadubik.myassistant.resource.app_title
+import com.gmail.vanyadubik.myassistant.resource.back
+import com.gmail.vanyadubik.myassistant.resource.email
+import com.gmail.vanyadubik.myassistant.resource.email_empty
+import com.gmail.vanyadubik.myassistant.resource.have_account
+import com.gmail.vanyadubik.myassistant.resource.loading
+import com.gmail.vanyadubik.myassistant.resource.login_title
+import com.gmail.vanyadubik.myassistant.resource.nickname
+import com.gmail.vanyadubik.myassistant.resource.nickname_empty
+import com.gmail.vanyadubik.myassistant.resource.no_account
+import com.gmail.vanyadubik.myassistant.resource.oops_error_title
+import com.gmail.vanyadubik.myassistant.resource.password
+import com.gmail.vanyadubik.myassistant.resource.password_empty
+import com.gmail.vanyadubik.myassistant.resource.register_title
+import com.gmail.vanyadubik.myassistant.resource.retry
+import com.gmail.vanyadubik.myassistant.resource.sign_in
+import com.gmail.vanyadubik.myassistant.resource.sign_up
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -63,9 +69,20 @@ fun LoginScreen(onBack: () -> Unit, viewModel: LoginViewModel = koinViewModel())
         onBack = onBack,
         onEmailChanged = viewModel::onEmailChanged,
         onPasswordChanged = viewModel::onPasswordChanged,
+        onNicknameChanged = viewModel::onNicknameChanged,
         onSubmit = viewModel::submit,
         onToggleMode = viewModel::toggleMode,
     )
+
+    if (state.actionError != null) {
+        ConfirmBottomSheet(
+            title = stringResource(Res.string.oops_error_title),
+            message = state.actionError,
+            confirmText = stringResource(Res.string.retry),
+            onConfirm = viewModel::retryLastAction,
+            onDismiss = viewModel::dismissActionError,
+        )
+    }
 
     state.errorMessage?.let {
         ErrorAppDialog(message = it, onDismiss = viewModel::dismissError)
@@ -79,11 +96,13 @@ private fun LoginContent(
     onBack: () -> Unit,
     onEmailChanged: () -> Unit,
     onPasswordChanged: () -> Unit,
-    onSubmit: (String, String) -> Unit,
+    onNicknameChanged: () -> Unit,
+    onSubmit: (String, String, String) -> Unit,
     onToggleMode: () -> Unit,
 ) {
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
+    var nickname by rememberSaveable { mutableStateOf("") }
 
     Box(modifier = Modifier.fillMaxSize().safeDrawingPadding().imePadding()) {
         IconButton(onClick = onBack, modifier = Modifier.align(Alignment.TopStart).padding(16.dp)) {
@@ -119,6 +138,21 @@ private fun LoginContent(
                 text = stringResource(if (state.isRegister) Res.string.register_title else Res.string.login_title),
                 style = MaterialTheme.typography.titleMedium,
             )
+
+            if (state.isRegister) {
+                OutlinedTextField(
+                    value = nickname,
+                    onValueChange = { nickname = it; onNicknameChanged() },
+                    label = { Text(stringResource(Res.string.nickname)) },
+                    isError = state.nicknameError,
+                    supportingText = if (state.nicknameError) {
+                        { Text(stringResource(Res.string.nickname_empty)) }
+                    } else null,
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
+
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it; onEmailChanged() },
@@ -146,7 +180,7 @@ private fun LoginContent(
             )
             AppButton(
                 text = stringResource(if (state.isRegister) Res.string.sign_up else Res.string.sign_in),
-                onClick = { onSubmit(email, password) },
+                onClick = { onSubmit(email, password, nickname) },
                 loadingMessage = if (state.isLoading) stringResource(Res.string.loading) else null,
             )
             TextButton(onClick = onToggleMode) {

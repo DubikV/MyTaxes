@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes.datastore.repository
+package com.gmail.vanyadubik.myassistant.datastore.repository
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -10,9 +10,9 @@ import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.gmail.vanyadubik.mytaxes.datastore.utils.toStoreKey
-import com.gmail.vanyadubik.mytaxes.domen.model.PreferenceKey
-import com.gmail.vanyadubik.mytaxes.domen.repository.DataStoreRepository
+import com.gmail.vanyadubik.myassistant.datastore.utils.toStoreKey
+import com.gmail.vanyadubik.myassistant.domen.model.PreferenceKey
+import com.gmail.vanyadubik.myassistant.domen.repository.DataStoreRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map

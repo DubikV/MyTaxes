@@ -1,21 +1,23 @@
-package com.gmail.vanyadubik.mytaxes.network.di
+package com.gmail.vanyadubik.myassistant.network.di
 
-import com.gmail.vanyadubik.mytaxes.common.logger.LogI
-import com.gmail.vanyadubik.mytaxes.common.utils.PlatformConfig.isDebugBuild
-import com.gmail.vanyadubik.mytaxes.domen.repository.AuthRepository
-import com.gmail.vanyadubik.mytaxes.domen.repository.ExchangeRateRepository
-import com.gmail.vanyadubik.mytaxes.domen.repository.DeviceRepository
-import com.gmail.vanyadubik.mytaxes.domen.repository.ExpenseRepository
-import com.gmail.vanyadubik.mytaxes.domen.repository.ProfileRepository
-import com.gmail.vanyadubik.mytaxes.domen.repository.TaxHistoryRepository
-import com.gmail.vanyadubik.mytaxes.network.FirebaseConfig
-import com.gmail.vanyadubik.mytaxes.network.HttpEngineFactory
-import com.gmail.vanyadubik.mytaxes.network.repository.AuthRepositoryImpl
-import com.gmail.vanyadubik.mytaxes.network.repository.ExchangeRateRepositoryImpl
-import com.gmail.vanyadubik.mytaxes.network.repository.DeviceRepositoryImpl
-import com.gmail.vanyadubik.mytaxes.network.repository.ExpenseRepositoryImpl
-import com.gmail.vanyadubik.mytaxes.network.repository.ProfileRepositoryImpl
-import com.gmail.vanyadubik.mytaxes.network.repository.TaxHistoryRepositoryImpl
+import com.gmail.vanyadubik.myassistant.common.logger.LogI
+import com.gmail.vanyadubik.myassistant.common.utils.PlatformConfig.isDebugBuild
+import com.gmail.vanyadubik.myassistant.domen.repository.AuthRepository
+import com.gmail.vanyadubik.myassistant.domen.repository.AutoServiceRepository
+import com.gmail.vanyadubik.myassistant.domen.repository.ExchangeRateRepository
+import com.gmail.vanyadubik.myassistant.domen.repository.DeviceRepository
+import com.gmail.vanyadubik.myassistant.domen.repository.ExpenseRepository
+import com.gmail.vanyadubik.myassistant.domen.repository.ProfileRepository
+import com.gmail.vanyadubik.myassistant.domen.repository.TaxHistoryRepository
+import com.gmail.vanyadubik.myassistant.network.FirebaseConfig
+import com.gmail.vanyadubik.myassistant.network.HttpEngineFactory
+import com.gmail.vanyadubik.myassistant.network.repository.AuthRepositoryImpl
+import com.gmail.vanyadubik.myassistant.network.repository.AutoServiceRepositoryImpl
+import com.gmail.vanyadubik.myassistant.network.repository.ExchangeRateRepositoryImpl
+import com.gmail.vanyadubik.myassistant.network.repository.DeviceRepositoryImpl
+import com.gmail.vanyadubik.myassistant.network.repository.ExpenseRepositoryImpl
+import com.gmail.vanyadubik.myassistant.network.repository.ProfileRepositoryImpl
+import com.gmail.vanyadubik.myassistant.network.repository.TaxHistoryRepositoryImpl
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.DefaultRequest
 import io.ktor.client.plugins.HttpResponseValidator
@@ -48,6 +50,7 @@ fun networkModule(
     singleOf(::ExpenseRepositoryImpl).bind(ExpenseRepository::class)
     singleOf(::DeviceRepositoryImpl).bind(DeviceRepository::class)
     singleOf(::ProfileRepositoryImpl).bind(ProfileRepository::class)
+    singleOf(::AutoServiceRepositoryImpl).bind(AutoServiceRepository::class)
 }
 
 fun createHttpClient(
@@ -73,7 +76,7 @@ fun createHttpClient(
     if (enableNetworkLogs) {
         install(Logging) {
             logger = Logger.SIMPLE
-            level = LogLevel.BODY
+            level = LogLevel.HEADERS
         }
     }
 

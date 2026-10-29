@@ -1,12 +1,12 @@
-package com.gmail.vanyadubik.mytaxes.commonui.utils
+package com.gmail.vanyadubik.myassistant.commonui.utils
 
 import androidx.compose.runtime.Composable
-import com.gmail.vanyadubik.mytaxes.domen.model.FopGroup
-import com.gmail.vanyadubik.mytaxes.resource.Res
-import com.gmail.vanyadubik.mytaxes.resource.fop_group_1
-import com.gmail.vanyadubik.mytaxes.resource.fop_group_2
-import com.gmail.vanyadubik.mytaxes.resource.fop_group_3_3
-import com.gmail.vanyadubik.mytaxes.resource.fop_group_3_5
+import com.gmail.vanyadubik.myassistant.domen.model.FopGroup
+import com.gmail.vanyadubik.myassistant.resource.Res
+import com.gmail.vanyadubik.myassistant.resource.fop_group_1
+import com.gmail.vanyadubik.myassistant.resource.fop_group_2
+import com.gmail.vanyadubik.myassistant.resource.fop_group_3_3
+import com.gmail.vanyadubik.myassistant.resource.fop_group_3_5
 import org.jetbrains.compose.resources.stringResource
 
 @Composable

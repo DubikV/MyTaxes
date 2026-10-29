@@ -1,7 +1,7 @@
-package com.gmail.vanyadubik.mytaxes.domen.repository
+package com.gmail.vanyadubik.myassistant.domen.repository
 
-import com.gmail.vanyadubik.mytaxes.domen.model.Currency
-import com.gmail.vanyadubik.mytaxes.domen.model.ResultState
+import com.gmail.vanyadubik.myassistant.domen.model.Currency
+import com.gmail.vanyadubik.myassistant.domen.model.ResultState
 import kotlinx.datetime.LocalDate
 
 interface ExchangeRateRepository {

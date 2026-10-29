@@ -28,10 +28,10 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.feature.login)
-            implementation(projects.feature.calculator)
             implementation(projects.feature.account)
-            implementation(projects.feature.history)
             implementation(projects.feature.home)
+            implementation(projects.feature.taxes)
+            implementation(projects.feature.auto)
         }
         androidMain.dependencies {
             implementation(libs.androidx.core.splashscreen)
@@ -47,11 +47,11 @@ kotlin {
 }
 
 android {
-    namespace = "com.gmail.vanyadubik.mytaxes"
+    namespace = "com.gmail.vanyadubik.myassistant"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.gmail.vanyadubik.mytaxes"
+        applicationId = "com.gmail.vanyadubik.myassistant"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 101

@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes.domen.model
+package com.gmail.vanyadubik.myassistant.domen.model
 
 enum class Currency(val code: String, val title: String) {
     UAH("UAH", "Ukrainian hryvnia"),

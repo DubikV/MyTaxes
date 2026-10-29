@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes.common.utils
+package com.gmail.vanyadubik.myassistant.common.utils
 
 expect class AppInfo {
     fun getAppVersion(): String

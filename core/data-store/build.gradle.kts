@@ -31,7 +31,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.gmail.vanyadubik.mytaxes.datastore"
+    namespace = "com.gmail.vanyadubik.myassistant.datastore"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()

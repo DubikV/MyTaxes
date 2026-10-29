@@ -1,18 +1,18 @@
-package com.gmail.vanyadubik.mytaxes.di
+package com.gmail.vanyadubik.myassistant.di
 
-import com.gmail.vanyadubik.mytaxes.common.di.commonModule
-import com.gmail.vanyadubik.mytaxes.common.di.commonPlatformModule
-import com.gmail.vanyadubik.mytaxes.commonui.di.commonUiModule
-import com.gmail.vanyadubik.mytaxes.commonui.di.commonUiPlatformModule
-import com.gmail.vanyadubik.mytaxes.datastore.di.dataStoreModule
-import com.gmail.vanyadubik.mytaxes.domen.di.domenModule
-import com.gmail.vanyadubik.mytaxes.featureaccount.di.featureAccountModule
-import com.gmail.vanyadubik.mytaxes.featurecalculator.di.featureCalculatorModule
-import com.gmail.vanyadubik.mytaxes.featurehistory.di.featureHistoryModule
-import com.gmail.vanyadubik.mytaxes.featurehome.di.featureHomeModule
-import com.gmail.vanyadubik.mytaxes.featurelogin.di.featureLoginModule
-import com.gmail.vanyadubik.mytaxes.network.di.networkModule
-import com.gmail.vanyadubik.mytaxes.viewmodel.MainViewModel
+import com.gmail.vanyadubik.myassistant.common.di.commonModule
+import com.gmail.vanyadubik.myassistant.common.di.commonPlatformModule
+import com.gmail.vanyadubik.myassistant.commonui.di.commonUiModule
+import com.gmail.vanyadubik.myassistant.commonui.di.commonUiPlatformModule
+import com.gmail.vanyadubik.myassistant.datastore.di.dataStoreModule
+import com.gmail.vanyadubik.myassistant.domen.di.domenModule
+import com.gmail.vanyadubik.myassistant.featureaccount.di.featureAccountModule
+import com.gmail.vanyadubik.myassistant.featureauto.di.featureAutoModule
+import com.gmail.vanyadubik.myassistant.featurehome.di.featureHomeModule
+import com.gmail.vanyadubik.myassistant.featurelogin.di.featureLoginModule
+import com.gmail.vanyadubik.myassistant.featuretaxes.di.featureTaxesModule
+import com.gmail.vanyadubik.myassistant.network.di.networkModule
+import com.gmail.vanyadubik.myassistant.viewmodel.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -50,10 +50,10 @@ public fun initKoin(
                     enableNetworkLogs = enableNetworkLogs
                 ),
                 featureLoginModule(),
-                featureCalculatorModule(),
+                featureTaxesModule(),
                 featureAccountModule(),
-                featureHistoryModule(),
                 featureHomeModule(),
+                featureAutoModule(),
                 platformModule(),
                 mainModule(),
                 commonUiModule(),

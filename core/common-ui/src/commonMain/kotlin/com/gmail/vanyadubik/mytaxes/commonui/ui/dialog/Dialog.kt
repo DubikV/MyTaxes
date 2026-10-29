@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes.commonui.ui.dialog
+package com.gmail.vanyadubik.myassistant.commonui.ui.dialog
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
@@ -19,10 +19,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.stringResource
-import com.gmail.vanyadubik.mytaxes.resource.Res
-import com.gmail.vanyadubik.mytaxes.resource.error
-import com.gmail.vanyadubik.mytaxes.resource.loading
-import com.gmail.vanyadubik.mytaxes.resource.ok
+import com.gmail.vanyadubik.myassistant.resource.Res
+import com.gmail.vanyadubik.myassistant.resource.error
+import com.gmail.vanyadubik.myassistant.resource.loading
+import com.gmail.vanyadubik.myassistant.resource.ok
 
 @Composable
 fun AppDialog(

@@ -36,7 +36,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.gmail.vanyadubik.mytaxes.common"
+    namespace = "com.gmail.vanyadubik.myassistant.common"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()

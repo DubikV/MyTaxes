@@ -1,6 +1,6 @@
-package com.gmail.vanyadubik.mytaxes.network
+package com.gmail.vanyadubik.myassistant.network
 
-import com.gmail.vanyadubik.mytaxes.domen.model.ResultState
+import com.gmail.vanyadubik.myassistant.domen.model.ResultState
 import io.ktor.client.plugins.HttpRequestTimeoutException
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText

@@ -1,4 +1,4 @@
-rootProject.name = "MyTaxes"
+rootProject.name = "MyAssistant"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
@@ -36,7 +36,7 @@ include(":core:domen")
 include(":core:network")
 include(":core:data-store")
 include(":feature:login")
-include(":feature:calculator")
 include(":feature:account")
-include(":feature:history")
 include(":feature:home")
+include(":feature:taxes")
+include(":feature:auto")

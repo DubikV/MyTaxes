@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes.commonui.ui
+package com.gmail.vanyadubik.myassistant.commonui.ui
 
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.staticCompositionLocalOf

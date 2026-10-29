@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes.commonui.ui.theme.button
+package com.gmail.vanyadubik.myassistant.commonui.ui.theme.button
 
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.geometry.Offset

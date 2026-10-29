@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes.commonui.ui.theme
+package com.gmail.vanyadubik.myassistant.commonui.ui.theme
 
 import android.app.Activity
 import androidx.compose.runtime.Composable

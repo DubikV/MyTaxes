@@ -1,6 +1,6 @@
-package com.gmail.vanyadubik.mytaxes.featurelogin.di
+package com.gmail.vanyadubik.myassistant.featurelogin.di
 
-import com.gmail.vanyadubik.mytaxes.featurelogin.LoginViewModel
+import com.gmail.vanyadubik.myassistant.featurelogin.LoginViewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 

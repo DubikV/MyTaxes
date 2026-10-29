@@ -25,7 +25,6 @@ function ruleDay(rule, month) {
   return rule.day;
 }
 
-
 // A calculation made since this day counts as the payment of the deadline: after the end of the paid period
 // (the month itself for the monthly tax, the quarter that ended in the previous month for the others).
 function paidSince(rule, year, month) {
@@ -42,6 +41,11 @@ function moveOffWeekend({ y, m, d }) {
 
 function daysBetween(from, to) {
   return Math.round((Date.UTC(to.y, to.m - 1, to.d) - Date.UTC(from.y, from.m - 1, from.d)) / 86400000);
+}
+
+function isLastDayOfMonth({ y, m, d }) {
+  const nextDay = new Date(Date.UTC(y, m - 1, d + 1));
+  return nextDay.getUTCMonth() !== m - 1;
 }
 
 /**
@@ -66,9 +70,25 @@ function remindersFor(today, group) {
   return result;
 }
 
+function monthlyRemindersFor(today, group) {
+  const result = [];
+  for (const rule of RULES) {
+    if (!rule.groups.includes(group)) continue;
+    const month = today.m;
+    const year = today.y;
+    if (rule.months !== "all" && !rule.months.includes(month)) continue;
+    result.push({ kind: rule.kind, daysLeft: 0, paidSince: paidSince(rule, year, month) });
+  }
+  if (result.length === 0) {
+    result.push({ kind: "monthlyTax", daysLeft: 0, paidSince: { y: today.y, m: today.m, d: 1 } });
+  }
+  return result;
+}
+
 const TEXTS = {
   uk: {
     title: { 0: "Сьогодні строк сплати податків", 3: "Через 3 дні строк сплати податків" },
+    monthlyTitle: "Нагадування про сплату податків",
     monthlyTax: "Єдиний податок і військовий збір ФОП 1-2 групи",
     declaration: "Подання декларації платника єдиного податку",
     quarterTax: "Сплата єдиного податку і військового збору за квартал",
@@ -76,6 +96,7 @@ const TEXTS = {
   },
   en: {
     title: { 0: "Tax deadline is today", 3: "Tax deadline in 3 days" },
+    monthlyTitle: "Tax payment reminder",
     monthlyTax: "Single tax and military levy (FOP groups 1-2)",
     declaration: "Single tax declaration",
     quarterTax: "Quarterly single tax and military levy payment",
@@ -83,10 +104,14 @@ const TEXTS = {
   },
 };
 
-function messageFor(reminders, language) {
+function messageFor(reminders, language, isMonthly = false) {
   const t = TEXTS[language] || TEXTS.en;
+  if (isMonthly) {
+    const body = reminders.map((r) => t[r.kind] || t.monthlyTax).join("; ");
+    return { title: t.monthlyTitle, body };
+  }
   const daysLeft = Math.min(...reminders.map((r) => r.daysLeft));
   return { title: t.title[daysLeft], body: reminders.map((r) => t[r.kind]).join("; ") };
 }
 
-module.exports = { remindersFor, messageFor };
+module.exports = { remindersFor, monthlyRemindersFor, isLastDayOfMonth, messageFor };

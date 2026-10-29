@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes.commonui.ui.theme.button
+package com.gmail.vanyadubik.myassistant.commonui.ui.theme.button
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -20,8 +20,8 @@ import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.gmail.vanyadubik.mytaxes.commonui.ui.theme.ThemeAnimationHandler
-import com.gmail.vanyadubik.mytaxes.domen.model.AppTheme
+import com.gmail.vanyadubik.myassistant.commonui.ui.theme.ThemeAnimationHandler
+import com.gmail.vanyadubik.myassistant.domen.model.AppTheme
 
 @Composable
 fun ThemeSwitchButton(

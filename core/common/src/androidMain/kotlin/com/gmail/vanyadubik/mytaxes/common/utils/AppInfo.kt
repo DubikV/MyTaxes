@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes.common.utils
+package com.gmail.vanyadubik.myassistant.common.utils
 
 import android.content.Context
 import android.content.pm.PackageInfo

@@ -1,12 +1,12 @@
-package com.gmail.vanyadubik.mytaxes.viewmodel
+package com.gmail.vanyadubik.myassistant.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gmail.vanyadubik.mytaxes.commonui.ui.theme.ThemeAnimationHandler
-import com.gmail.vanyadubik.mytaxes.domen.usecase.AccountUseCase
-import com.gmail.vanyadubik.mytaxes.domen.usecase.AuthUseCase
-import com.gmail.vanyadubik.mytaxes.domen.usecase.DataStoreUseCase
-import com.gmail.vanyadubik.mytaxes.domen.usecase.PushNotificationUseCase
+import com.gmail.vanyadubik.myassistant.commonui.ui.theme.ThemeAnimationHandler
+import com.gmail.vanyadubik.myassistant.domen.usecase.AccountUseCase
+import com.gmail.vanyadubik.myassistant.domen.usecase.AuthUseCase
+import com.gmail.vanyadubik.myassistant.domen.usecase.DataStoreUseCase
+import com.gmail.vanyadubik.myassistant.domen.usecase.PushNotificationUseCase
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine

@@ -1,7 +1,7 @@
-package com.gmail.vanyadubik.mytaxes.domen.repository
+package com.gmail.vanyadubik.myassistant.domen.repository
 
 
-import com.gmail.vanyadubik.mytaxes.domen.model.PreferenceKey
+import com.gmail.vanyadubik.myassistant.domen.model.PreferenceKey
 import kotlinx.coroutines.flow.Flow
 
 interface DataStoreRepository {

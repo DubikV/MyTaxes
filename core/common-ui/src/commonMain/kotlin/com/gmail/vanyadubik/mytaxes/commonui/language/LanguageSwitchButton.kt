@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes.commonui.language
+package com.gmail.vanyadubik.myassistant.commonui.language
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -13,10 +13,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.gmail.vanyadubik.mytaxes.domen.model.AppLanguage
-import com.gmail.vanyadubik.mytaxes.resource.Res
-import com.gmail.vanyadubik.mytaxes.resource.language
-import com.gmail.vanyadubik.mytaxes.resource.language_system
+import com.gmail.vanyadubik.myassistant.domen.model.AppLanguage
+import com.gmail.vanyadubik.myassistant.resource.Res
+import com.gmail.vanyadubik.myassistant.resource.language
+import com.gmail.vanyadubik.myassistant.resource.language_system
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 

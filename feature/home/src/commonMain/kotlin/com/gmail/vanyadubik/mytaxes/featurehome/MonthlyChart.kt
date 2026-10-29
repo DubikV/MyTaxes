@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes.featurehome
+package com.gmail.vanyadubik.myassistant.featurehome
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -18,12 +18,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.gmail.vanyadubik.mytaxes.commonui.utils.formatNumber
-import com.gmail.vanyadubik.mytaxes.domen.model.MonthlyStats
-import com.gmail.vanyadubik.mytaxes.resource.Res
-import com.gmail.vanyadubik.mytaxes.resource.chart_expenses
-import com.gmail.vanyadubik.mytaxes.resource.chart_income
-import com.gmail.vanyadubik.mytaxes.resource.chart_tax
+import com.gmail.vanyadubik.myassistant.commonui.utils.formatNumber
+import com.gmail.vanyadubik.myassistant.domen.model.MonthlyStats
+import com.gmail.vanyadubik.myassistant.resource.Res
+import com.gmail.vanyadubik.myassistant.resource.chart_expenses
+import com.gmail.vanyadubik.myassistant.resource.chart_income
+import com.gmail.vanyadubik.myassistant.resource.chart_tax
 import org.jetbrains.compose.resources.stringResource
 
 private val IncomeColor = Color(0xFF2E9E5B)

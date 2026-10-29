@@ -40,7 +40,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.gmail.vanyadubik.mytaxes.network"
+    namespace = "com.gmail.vanyadubik.myassistant.network"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()

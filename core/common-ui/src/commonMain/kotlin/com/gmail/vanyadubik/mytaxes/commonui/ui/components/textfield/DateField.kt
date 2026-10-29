@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes.commonui.ui.components.textfield
+package com.gmail.vanyadubik.myassistant.commonui.ui.components.textfield
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -21,10 +21,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.gmail.vanyadubik.mytaxes.commonui.utils.formatDate
-import com.gmail.vanyadubik.mytaxes.resource.Res
-import com.gmail.vanyadubik.mytaxes.resource.cancel
-import com.gmail.vanyadubik.mytaxes.resource.select
+import com.gmail.vanyadubik.myassistant.commonui.utils.formatDate
+import com.gmail.vanyadubik.myassistant.resource.Res
+import com.gmail.vanyadubik.myassistant.resource.cancel
+import com.gmail.vanyadubik.myassistant.resource.select
 import kotlinx.datetime.LocalDate
 import org.jetbrains.compose.resources.stringResource
 

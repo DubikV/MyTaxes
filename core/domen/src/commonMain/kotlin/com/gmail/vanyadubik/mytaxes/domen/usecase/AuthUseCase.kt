@@ -1,9 +1,9 @@
-package com.gmail.vanyadubik.mytaxes.domen.usecase
+package com.gmail.vanyadubik.myassistant.domen.usecase
 
-import com.gmail.vanyadubik.mytaxes.domen.model.AuthSession
-import com.gmail.vanyadubik.mytaxes.domen.model.PreferenceKey
-import com.gmail.vanyadubik.mytaxes.domen.model.ResultState
-import com.gmail.vanyadubik.mytaxes.domen.repository.AuthRepository
+import com.gmail.vanyadubik.myassistant.domen.model.AuthSession
+import com.gmail.vanyadubik.myassistant.domen.model.PreferenceKey
+import com.gmail.vanyadubik.myassistant.domen.model.ResultState
+import com.gmail.vanyadubik.myassistant.domen.repository.AuthRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged

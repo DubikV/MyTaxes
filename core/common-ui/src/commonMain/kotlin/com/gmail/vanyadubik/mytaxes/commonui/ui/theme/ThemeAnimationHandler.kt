@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes.commonui.ui.theme
+package com.gmail.vanyadubik.myassistant.commonui.ui.theme
 
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.tween
@@ -7,8 +7,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
-import com.gmail.vanyadubik.mytaxes.domen.model.AppTheme
-import com.gmail.vanyadubik.mytaxes.domen.usecase.DataStoreUseCase
+import com.gmail.vanyadubik.myassistant.domen.model.AppTheme
+import com.gmail.vanyadubik.myassistant.domen.usecase.DataStoreUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectIndexed

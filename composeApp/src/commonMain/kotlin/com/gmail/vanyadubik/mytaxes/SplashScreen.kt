@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes
+package com.gmail.vanyadubik.myassistant
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
@@ -17,11 +17,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import com.gmail.vanyadubik.mytaxes.commonui.ui.LocalIsDarkTheme
-import com.gmail.vanyadubik.mytaxes.commonui.ui.theme.SetSystemBarsAppearance
-import com.gmail.vanyadubik.mytaxes.resource.AppColors
-import com.gmail.vanyadubik.mytaxes.resource.Res
-import com.gmail.vanyadubik.mytaxes.resource.ic_splash
+import com.gmail.vanyadubik.myassistant.commonui.ui.LocalIsDarkTheme
+import com.gmail.vanyadubik.myassistant.commonui.ui.theme.SetSystemBarsAppearance
+import com.gmail.vanyadubik.myassistant.resource.AppColors
+import com.gmail.vanyadubik.myassistant.resource.Res
+import com.gmail.vanyadubik.myassistant.resource.ic_splash
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.painterResource
 
@@ -60,8 +60,8 @@ fun SplashScreen(
             contentDescription = "Splash Logo",
             modifier = Modifier
                 .align(Alignment.Center)
-                .width(280.dp)
-                .height(280.dp)
+                .width(300.dp)
+                .height(300.dp)
 //                .fillMaxSize()
                 .alpha(alpha.value),
             contentScale = ContentScale.Fit

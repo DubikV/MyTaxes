@@ -1,10 +1,10 @@
-package com.gmail.vanyadubik.mytaxes.push
+package com.gmail.vanyadubik.myassistant.push
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
-import com.gmail.vanyadubik.mytaxes.R
+import com.gmail.vanyadubik.myassistant.R
 
 const val REMINDER_CHANNEL_ID = "tax_reminders"
 

@@ -1,7 +1,7 @@
-package com.gmail.vanyadubik.mytaxes.domen.repository
+package com.gmail.vanyadubik.myassistant.domen.repository
 
-import com.gmail.vanyadubik.mytaxes.domen.model.Expense
-import com.gmail.vanyadubik.mytaxes.domen.model.ResultState
+import com.gmail.vanyadubik.myassistant.domen.model.Expense
+import com.gmail.vanyadubik.myassistant.domen.model.ResultState
 
 interface ExpenseRepository {
     suspend fun save(userId: String, idToken: String, expense: Expense): ResultState<Expense>

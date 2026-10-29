@@ -1,12 +1,12 @@
-package com.gmail.vanyadubik.mytaxes.domen.usecase
+package com.gmail.vanyadubik.myassistant.domen.usecase
 
-import com.gmail.vanyadubik.mytaxes.domen.model.Currency
-import com.gmail.vanyadubik.mytaxes.domen.model.FopGroup
-import com.gmail.vanyadubik.mytaxes.domen.model.IncomeInput
-import com.gmail.vanyadubik.mytaxes.domen.model.IncomeItem
-import com.gmail.vanyadubik.mytaxes.domen.model.ResultState
-import com.gmail.vanyadubik.mytaxes.domen.model.TaxCalculation
-import com.gmail.vanyadubik.mytaxes.domen.repository.ExchangeRateRepository
+import com.gmail.vanyadubik.myassistant.domen.model.Currency
+import com.gmail.vanyadubik.myassistant.domen.model.FopGroup
+import com.gmail.vanyadubik.myassistant.domen.model.IncomeInput
+import com.gmail.vanyadubik.myassistant.domen.model.IncomeItem
+import com.gmail.vanyadubik.myassistant.domen.model.ResultState
+import com.gmail.vanyadubik.myassistant.domen.model.TaxCalculation
+import com.gmail.vanyadubik.myassistant.domen.repository.ExchangeRateRepository
 import kotlinx.datetime.LocalDate
 import kotlin.math.round
 

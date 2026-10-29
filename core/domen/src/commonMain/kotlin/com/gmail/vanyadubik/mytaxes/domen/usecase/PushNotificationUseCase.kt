@@ -1,9 +1,10 @@
-package com.gmail.vanyadubik.mytaxes.domen.usecase
+package com.gmail.vanyadubik.myassistant.domen.usecase
 
-import com.gmail.vanyadubik.mytaxes.domen.model.PushDevice
-import com.gmail.vanyadubik.mytaxes.domen.model.ResultState
-import com.gmail.vanyadubik.mytaxes.domen.repository.DeviceRepository
-import com.gmail.vanyadubik.mytaxes.domen.repository.PushTokenProvider
+import com.gmail.vanyadubik.myassistant.domen.model.PushDevice
+import com.gmail.vanyadubik.myassistant.domen.model.ResultState
+import com.gmail.vanyadubik.myassistant.domen.model.TaxReminderMode
+import com.gmail.vanyadubik.myassistant.domen.repository.DeviceRepository
+import com.gmail.vanyadubik.myassistant.domen.repository.PushTokenProvider
 import kotlinx.coroutines.flow.first
 
 /**
@@ -16,8 +17,8 @@ class PushNotificationUseCase(
     private val deviceRepository: DeviceRepository,
     private val tokenProvider: PushTokenProvider,
 ) {
-    /** Registers (or refreshes the group / language of) the device; [token] is the new token when FCM rotated it. */
-    suspend fun register(token: String? = null) {
+    /** Registers (or refreshes the group / language / reminder mode of) the device; [token] is the new token when FCM rotated it. */
+    suspend fun register(token: String? = null, taxReminderMode: TaxReminderMode? = null) {
         val fcmToken = token ?: tokenProvider.getToken() ?: return
         val language = dataStoreUseCase.language.first().let { it.code ?: tokenProvider.systemLanguage }
         val device = PushDevice(
@@ -25,6 +26,7 @@ class PushNotificationUseCase(
             platform = tokenProvider.platform,
             language = language,
             group = dataStoreUseCase.fopGroup.first(),
+            taxReminderMode = taxReminderMode ?: TaxReminderMode.AS_NEEDED,
         )
         withSession { userId, idToken -> deviceRepository.register(userId, idToken, device) }
     }

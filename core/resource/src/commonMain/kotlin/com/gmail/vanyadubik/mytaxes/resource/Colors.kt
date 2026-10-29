@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes.resource
+package com.gmail.vanyadubik.myassistant.resource
 
 import androidx.compose.ui.graphics.Color
 

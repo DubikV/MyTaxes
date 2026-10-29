@@ -1,8 +1,8 @@
-package com.gmail.vanyadubik.mytaxes.datastore.di
+package com.gmail.vanyadubik.myassistant.datastore.di
 
-import com.gmail.vanyadubik.mytaxes.datastore.platformDataStoreFactory
-import com.gmail.vanyadubik.mytaxes.datastore.repository.DataStoreRepositoryImpl
-import com.gmail.vanyadubik.mytaxes.domen.repository.DataStoreRepository
+import com.gmail.vanyadubik.myassistant.datastore.platformDataStoreFactory
+import com.gmail.vanyadubik.myassistant.datastore.repository.DataStoreRepositoryImpl
+import com.gmail.vanyadubik.myassistant.domen.repository.DataStoreRepository
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module

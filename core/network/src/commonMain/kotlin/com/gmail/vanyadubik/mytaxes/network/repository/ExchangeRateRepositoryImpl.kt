@@ -1,11 +1,11 @@
-package com.gmail.vanyadubik.mytaxes.network.repository
+package com.gmail.vanyadubik.myassistant.network.repository
 
-import com.gmail.vanyadubik.mytaxes.domen.model.Currency
-import com.gmail.vanyadubik.mytaxes.domen.model.ResultState
-import com.gmail.vanyadubik.mytaxes.domen.repository.ExchangeRateRepository
-import com.gmail.vanyadubik.mytaxes.network.ApiException
-import com.gmail.vanyadubik.mytaxes.network.apiCall
-import com.gmail.vanyadubik.mytaxes.network.dto.NbuRateDto
+import com.gmail.vanyadubik.myassistant.domen.model.Currency
+import com.gmail.vanyadubik.myassistant.domen.model.ResultState
+import com.gmail.vanyadubik.myassistant.domen.repository.ExchangeRateRepository
+import com.gmail.vanyadubik.myassistant.network.ApiException
+import com.gmail.vanyadubik.myassistant.network.apiCall
+import com.gmail.vanyadubik.myassistant.network.dto.NbuRateDto
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter

@@ -1,7 +1,7 @@
-package com.gmail.vanyadubik.mytaxes.di
+package com.gmail.vanyadubik.myassistant.di
 
-import com.gmail.vanyadubik.mytaxes.domen.repository.PushTokenProvider
-import com.gmail.vanyadubik.mytaxes.push.AndroidPushTokenProvider
+import com.gmail.vanyadubik.myassistant.domen.repository.PushTokenProvider
+import com.gmail.vanyadubik.myassistant.push.AndroidPushTokenProvider
 import com.google.firebase.FirebaseOptions
 import org.koin.dsl.module
 

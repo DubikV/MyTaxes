@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes.domen.model
+package com.gmail.vanyadubik.myassistant.domen.model
 
 sealed class ResultState<out T> {
     data class Success<out T>(val data: T? = null) : ResultState<T>()

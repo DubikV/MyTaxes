@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes.domen.model
+package com.gmail.vanyadubik.myassistant.domen.model
 
 import kotlin.reflect.KType
 import kotlin.reflect.typeOf
@@ -15,10 +15,11 @@ sealed class PreferenceKey<T>(
     data object TokenExpiresAt : PreferenceKey<Long>("TOKEN_EXPIRES_AT_PREFERENCE", typeOf<Long>())
     data object UserId : PreferenceKey<String>("USER_ID_PREFERENCE", typeOf<String>())
     data object UserEmail : PreferenceKey<String>("USER_EMAIL_PREFERENCE", typeOf<String>())
+    data object TaxIncomesKey : PreferenceKey<String>("TAX_INCOMES_PREFERENCE", typeOf<String>())
 
     companion object {
-        fun getAllKeys() = listOf(Theme, Language, FopGroupKey, IdToken, RefreshToken, TokenExpiresAt, UserId, UserEmail)
+        fun getAllKeys() = listOf(Theme, Language, FopGroupKey, IdToken, RefreshToken, TokenExpiresAt, UserId, UserEmail, TaxIncomesKey)
 
-        fun getSavedKeys() = listOf(Theme, Language, FopGroupKey)
+        fun getSavedKeys() = listOf(Theme, Language, FopGroupKey, TaxIncomesKey)
     }
 }

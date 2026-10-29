@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes.push
+package com.gmail.vanyadubik.myassistant.push
 
 import android.Manifest
 import android.app.PendingIntent
@@ -7,9 +7,9 @@ import android.content.pm.PackageManager
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
-import com.gmail.vanyadubik.mytaxes.MainActivity
-import com.gmail.vanyadubik.mytaxes.R
-import com.gmail.vanyadubik.mytaxes.domen.usecase.PushNotificationUseCase
+import com.gmail.vanyadubik.myassistant.MainActivity
+import com.gmail.vanyadubik.myassistant.R
+import com.gmail.vanyadubik.myassistant.domen.usecase.PushNotificationUseCase
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import kotlinx.coroutines.CoroutineScope

@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes.common.di
+package com.gmail.vanyadubik.myassistant.common.di
 
 import org.koin.core.module.Module
 import org.koin.dsl.module

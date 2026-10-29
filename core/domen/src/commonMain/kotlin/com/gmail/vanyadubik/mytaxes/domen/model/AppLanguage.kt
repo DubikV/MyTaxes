@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes.domen.model
+package com.gmail.vanyadubik.myassistant.domen.model
 
 /** [code] is null for the system language. */
 enum class AppLanguage(val id: String, val code: String?, val nativeName: String?) {

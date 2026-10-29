@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes.domen.repository
+package com.gmail.vanyadubik.myassistant.domen.repository
 
 /** Platform source of the push (FCM) registration token. */
 interface PushTokenProvider {

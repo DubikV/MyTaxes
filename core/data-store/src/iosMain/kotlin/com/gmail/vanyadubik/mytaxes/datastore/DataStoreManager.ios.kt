@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes.datastore
+package com.gmail.vanyadubik.myassistant.datastore
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.okio.OkioStorage

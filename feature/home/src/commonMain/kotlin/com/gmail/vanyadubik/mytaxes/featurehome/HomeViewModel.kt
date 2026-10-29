@@ -1,110 +1,79 @@
-package com.gmail.vanyadubik.mytaxes.featurehome
+package com.gmail.vanyadubik.myassistant.featurehome
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gmail.vanyadubik.mytaxes.domen.model.Expense
-import com.gmail.vanyadubik.mytaxes.domen.model.MonthlyStats
-import com.gmail.vanyadubik.mytaxes.domen.model.ResultState
-import com.gmail.vanyadubik.mytaxes.domen.model.TaxCalculation
-import com.gmail.vanyadubik.mytaxes.domen.usecase.AuthUseCase
-import com.gmail.vanyadubik.mytaxes.domen.usecase.ExpenseUseCase
-import com.gmail.vanyadubik.mytaxes.domen.usecase.MonthlyStatsUseCase
-import com.gmail.vanyadubik.mytaxes.domen.usecase.TaxHistoryUseCase
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
+import com.gmail.vanyadubik.myassistant.domen.model.ResultState
+import com.gmail.vanyadubik.myassistant.domen.usecase.AccountUseCase
+import com.gmail.vanyadubik.myassistant.domen.usecase.AuthUseCase
+import com.gmail.vanyadubik.myassistant.domen.usecase.TaxesUseCase
+import com.gmail.vanyadubik.myassistant.featurehome.model.HomeUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.todayIn
-import kotlin.time.Clock
-import kotlin.time.ExperimentalTime
 
-data class HomeUiState(
-    val isLoggedIn: Boolean = false,
-    val isLoading: Boolean = false,
-    val stats: List<MonthlyStats> = emptyList(),
-    val expenses: List<Expense> = emptyList(),
-    val errorMessage: String? = null,
-)
-
-@OptIn(ExperimentalTime::class)
 class HomeViewModel(
     private val authUseCase: AuthUseCase,
-    private val taxHistory: TaxHistoryUseCase,
-    private val expenseUseCase: ExpenseUseCase,
-    private val monthlyStats: MonthlyStatsUseCase,
+    private val taxesUseCase: TaxesUseCase,
+    private val accountUseCase: AccountUseCase,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(HomeUiState())
     val state: StateFlow<HomeUiState> = _state.asStateFlow()
 
-    private var calculations: List<TaxCalculation> = emptyList()
+    private var lastAction: (() -> Unit)? = null
 
     init {
         viewModelScope.launch {
             authUseCase.isLoggedIn.collect { loggedIn ->
-                if (!loggedIn) calculations = emptyList()
-                _state.update {
-                    if (loggedIn) it.copy(isLoggedIn = true) else HomeUiState()
+                _state.update { it.copy(isLoggedIn = loggedIn) }
+                if (loggedIn) {
+                    accountUseCase.loadProfile()
                 }
-                if (loggedIn) load()
+            }
+        }
+
+        viewModelScope.launch {
+            taxesUseCase.getIncomes().collect { incomes ->
+                val untaxed = incomes.filterNot { it.isTaxCalculated }
+                val unpaid = incomes.filter { it.isTaxCalculated }
+                _state.update {
+                    it.copy(
+                        untaxedIncomes = untaxed,
+                        unpaidTaxes = unpaid,
+                    )
+                }
+            }
+        }
+
+        viewModelScope.launch {
+            accountUseCase.savedCars.collect { cars ->
+                _state.update { it.copy(cars = cars) }
             }
         }
     }
 
-    /** Loads the data when the user signs in and on pull-to-refresh. */
     fun load() {
         if (!_state.value.isLoggedIn) return
-        _state.update { it.copy(isLoading = true, errorMessage = null) }
+        _state.update { it.copy(isLoading = true, loadError = null) }
         viewModelScope.launch {
-            val (history, expenses) = coroutineScope {
-                val history = async { taxHistory.getAll() }
-                val expenses = async { expenseUseCase.getAll() }
-                history.await() to expenses.await()
-            }
-            val error = (history as? ResultState.Error)?.message ?: (expenses as? ResultState.Error)?.message
-            if (history is ResultState.Success) calculations = history.data.orEmpty()
-            val expenseList = if (expenses is ResultState.Success) expenses.data.orEmpty() else _state.value.expenses
+            val result = accountUseCase.loadProfile()
             _state.update {
-                if (!it.isLoggedIn) it else it.copy(isLoading = false, errorMessage = error).withData(expenseList)
+                it.copy(
+                    isLoading = false,
+                    loadError = if (result is ResultState.Error) result.message else null,
+                )
             }
         }
     }
 
-    fun addExpense(expense: Expense) {
-        viewModelScope.launch {
-            when (val result = expenseUseCase.save(expense)) {
-                is ResultState.Success -> {
-                    val saved = result.data ?: expense
-                    _state.update { it.withData(it.expenses + saved) }
-                }
-                is ResultState.Error -> _state.update { it.copy(errorMessage = result.message ?: "Error") }
-                else -> {}
-            }
-        }
+    fun retryLastAction() {
+        dismissActionError()
+        lastAction?.invoke()
     }
 
-    fun deleteExpense(expense: Expense) {
-        val id = expense.id ?: return
-        viewModelScope.launch {
-            when (val result = expenseUseCase.delete(id)) {
-                is ResultState.Success -> _state.update { s -> s.withData(s.expenses.filterNot { it.id == id }) }
-                is ResultState.Error -> _state.update { it.copy(errorMessage = result.message ?: "Error") }
-                else -> {}
-            }
-        }
-    }
-
-    fun dismissError() = _state.update { it.copy(errorMessage = null) }
-
-    private fun HomeUiState.withData(expenses: List<Expense>): HomeUiState {
-        val today = Clock.System.todayIn(TimeZone.currentSystemDefault())
-        return copy(
-            expenses = expenses.sortedWith(compareByDescending<Expense> { it.date }.thenByDescending { it.createdAt }),
-            stats = monthlyStats(calculations, expenses, today.year, today.monthNumber),
-        )
+    fun dismissActionError() {
+        _state.update { it.copy(actionError = null) }
     }
 }

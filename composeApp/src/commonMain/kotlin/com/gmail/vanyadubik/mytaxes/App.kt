@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes
+package com.gmail.vanyadubik.myassistant
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -12,15 +12,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.gmail.vanyadubik.mytaxes.commonui.di.SystemAppearance
-import com.gmail.vanyadubik.mytaxes.commonui.language.LanguageHandler
-import com.gmail.vanyadubik.mytaxes.commonui.language.applyAppLanguage
-import com.gmail.vanyadubik.mytaxes.commonui.ui.LocalIsDarkTheme
-import com.gmail.vanyadubik.mytaxes.commonui.ui.LocalIsShowSplash
-import com.gmail.vanyadubik.mytaxes.commonui.ui.theme.AppTheme
-import com.gmail.vanyadubik.mytaxes.commonui.ui.theme.ThemeAnimationScope
-import com.gmail.vanyadubik.mytaxes.navigation.AppNavigation
-import com.gmail.vanyadubik.mytaxes.viewmodel.MainViewModel
+import com.gmail.vanyadubik.myassistant.commonui.di.SystemAppearance
+import com.gmail.vanyadubik.myassistant.commonui.language.LanguageHandler
+import com.gmail.vanyadubik.myassistant.commonui.language.applyAppLanguage
+import com.gmail.vanyadubik.myassistant.commonui.ui.LocalIsDarkTheme
+import com.gmail.vanyadubik.myassistant.commonui.ui.LocalIsShowSplash
+import com.gmail.vanyadubik.myassistant.commonui.ui.theme.AppTheme
+import com.gmail.vanyadubik.myassistant.commonui.ui.theme.ThemeAnimationScope
+import com.gmail.vanyadubik.myassistant.navigation.AppNavigation
+import com.gmail.vanyadubik.myassistant.viewmodel.MainViewModel
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel

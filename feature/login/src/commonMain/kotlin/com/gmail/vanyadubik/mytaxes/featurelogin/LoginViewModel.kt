@@ -1,63 +1,80 @@
-package com.gmail.vanyadubik.mytaxes.featurelogin
+package com.gmail.vanyadubik.myassistant.featurelogin
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gmail.vanyadubik.mytaxes.commonui.ui.theme.ThemeAnimationHandler
-import com.gmail.vanyadubik.mytaxes.domen.model.ResultState
-import com.gmail.vanyadubik.mytaxes.domen.model.getMessage
-import com.gmail.vanyadubik.mytaxes.domen.usecase.AuthUseCase
+import com.gmail.vanyadubik.myassistant.commonui.ui.theme.ThemeAnimationHandler
+import com.gmail.vanyadubik.myassistant.domen.model.ResultState
+import com.gmail.vanyadubik.myassistant.domen.model.getMessage
+import com.gmail.vanyadubik.myassistant.domen.usecase.AccountUseCase
+import com.gmail.vanyadubik.myassistant.domen.usecase.AuthUseCase
+import com.gmail.vanyadubik.myassistant.featurelogin.model.LoginUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-data class LoginUiState(
-    val isRegister: Boolean = false,
-    val isLoading: Boolean = false,
-    val emailError: Boolean = false,
-    val passwordError: Boolean = false,
-    val errorMessage: String? = null,
-)
-
 class LoginViewModel(
     private val authUseCase: AuthUseCase,
-    val themeAnimationHandler: ThemeAnimationHandler
+    private val accountUseCase: AccountUseCase,
+    val themeAnimationHandler: ThemeAnimationHandler,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(LoginUiState())
     val state: StateFlow<LoginUiState> = _state.asStateFlow()
 
-    fun toggleMode() = _state.update { it.copy(isRegister = !it.isRegister, errorMessage = null) }
+    private var lastAction: (() -> Unit)? = null
 
-    fun submit(email: String, password: String) {
+    fun toggleMode() = _state.update { it.copy(isRegister = !it.isRegister, actionError = null) }
+
+    fun submit(email: String, password: String, nickname: String = "") {
         if (_state.value.isLoading) return
         val emailEmpty = email.isBlank()
         val passwordEmpty = password.isEmpty()
-        if (emailEmpty || passwordEmpty) {
-            _state.update { it.copy(emailError = emailEmpty, passwordError = passwordEmpty) }
+        val nicknameEmpty = _state.value.isRegister && nickname.isBlank()
+        if (emailEmpty || passwordEmpty || nicknameEmpty) {
+            _state.update {
+                it.copy(
+                    emailError = emailEmpty,
+                    passwordError = passwordEmpty,
+                    nicknameError = nicknameEmpty,
+                )
+            }
             return
         }
-        _state.update { it.copy(isLoading = true, errorMessage = null) }
+        lastAction = { submit(email, password, nickname) }
+        _state.update { it.copy(isLoading = true, actionError = null) }
         viewModelScope.launch {
             val result = if (_state.value.isRegister) {
-                authUseCase.signUp(email, password)
+                val signUpResult = authUseCase.signUp(email, password)
+                if (signUpResult is ResultState.Success && nickname.isNotBlank()) {
+                    accountUseCase.saveNickname(nickname)
+                }
+                signUpResult
             } else {
                 authUseCase.signIn(email, password)
             }
-            // On success the session is stored and the navigation reacts to the login state
             _state.update {
                 it.copy(
                     isLoading = false,
-                    errorMessage = if (result is ResultState.Error) result.getMessage() ?: "Error" else null
+                    actionError = if (result is ResultState.Error) result.getMessage() ?: "Error" else null,
                 )
             }
         }
     }
 
-    fun onEmailChanged() = _state.update { it.copy(emailError = false, errorMessage = null) }
+    fun onEmailChanged() = _state.update { it.copy(emailError = false, actionError = null) }
 
-    fun onPasswordChanged() = _state.update { it.copy(passwordError = false, errorMessage = null) }
+    fun onPasswordChanged() = _state.update { it.copy(passwordError = false, actionError = null) }
+
+    fun onNicknameChanged() = _state.update { it.copy(nicknameError = false, actionError = null) }
+
+    fun retryLastAction() {
+        dismissActionError()
+        lastAction?.invoke()
+    }
+
+    fun dismissActionError() = _state.update { it.copy(actionError = null) }
 
     fun dismissError() = _state.update { it.copy(errorMessage = null) }
 }

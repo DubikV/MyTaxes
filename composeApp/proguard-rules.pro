@@ -17,10 +17,10 @@
 -keep class * implements kotlinx.serialization.KSerializer { *; }
 
 # Keep all @Serializable models in our package with their members for JSON parsing/serialization
--keep @kotlinx.serialization.Serializable class com.gmail.vanyadubik.mytaxes.** {
+-keep @kotlinx.serialization.Serializable class com.gmail.vanyadubik.myassistant.** {
     *;
 }
--keepclassmembers class com.gmail.vanyadubik.mytaxes.** {
+-keepclassmembers class com.gmail.vanyadubik.myassistant.** {
     @kotlinx.serialization.Serializable <fields>;
     @kotlinx.serialization.SerialName <fields>;
 }
@@ -28,7 +28,7 @@
 # Koin DI
 -keep class org.koin.** { *; }
 -dontwarn org.koin.**
--keep class com.gmail.vanyadubik.mytaxes.** {
+-keep class com.gmail.vanyadubik.myassistant.** {
     @org.koin.core.annotation.* <fields>;
     @org.koin.core.annotation.* <methods>;
 }
@@ -52,10 +52,10 @@
 -keep class androidx.compose.** { *; }
 
 # Android Entry Points & Application classes
--keep public class com.gmail.vanyadubik.mytaxes.MainActivity
--keep public class com.gmail.vanyadubik.mytaxes.TaxApp
+-keep public class com.gmail.vanyadubik.myassistant.MainActivity
+-keep public class com.gmail.vanyadubik.myassistant.TaxApp
 
 # Parcelable classes (if any)
--keepclassmembers class com.gmail.vanyadubik.mytaxes.** implements android.os.Parcelable {
+-keepclassmembers class com.gmail.vanyadubik.myassistant.** implements android.os.Parcelable {
     public static final android.os.Parcelable$Creator CREATOR;
 }

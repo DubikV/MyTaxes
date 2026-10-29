@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes.commonui.ui.components.textfield
+package com.gmail.vanyadubik.myassistant.commonui.ui.components.textfield
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -29,10 +29,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
-import com.gmail.vanyadubik.mytaxes.common.utils.DateTimeFormat
-import com.gmail.vanyadubik.mytaxes.resource.Res
-import com.gmail.vanyadubik.mytaxes.resource.cancel
-import com.gmail.vanyadubik.mytaxes.resource.select
+import com.gmail.vanyadubik.myassistant.common.utils.DateTimeFormat
+import com.gmail.vanyadubik.myassistant.resource.Res
+import com.gmail.vanyadubik.myassistant.resource.cancel
+import com.gmail.vanyadubik.myassistant.resource.select
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)

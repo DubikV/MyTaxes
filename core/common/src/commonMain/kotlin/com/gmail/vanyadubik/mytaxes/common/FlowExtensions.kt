@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes.common
+package com.gmail.vanyadubik.myassistant.common
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner

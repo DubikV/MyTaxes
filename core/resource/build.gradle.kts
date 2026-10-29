@@ -32,12 +32,12 @@ kotlin {
 
 compose.resources {
     publicResClass = true //access in another modules
-    packageOfResClass = "com.gmail.vanyadubik.mytaxes.resource"
+    packageOfResClass = "com.gmail.vanyadubik.myassistant.resource"
     generateResClass = auto
 }
 
 android {
-    namespace = "com.gmail.vanyadubik.mytaxes.resource"
+    namespace = "com.gmail.vanyadubik.myassistant.resource"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()

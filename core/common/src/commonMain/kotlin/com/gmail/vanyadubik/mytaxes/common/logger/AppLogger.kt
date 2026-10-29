@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes.common.logger
+package com.gmail.vanyadubik.myassistant.common.logger
 
 
 expect object Logger {

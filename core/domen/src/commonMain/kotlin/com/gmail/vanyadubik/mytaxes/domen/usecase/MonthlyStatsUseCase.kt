@@ -1,8 +1,8 @@
-package com.gmail.vanyadubik.mytaxes.domen.usecase
+package com.gmail.vanyadubik.myassistant.domen.usecase
 
-import com.gmail.vanyadubik.mytaxes.domen.model.Expense
-import com.gmail.vanyadubik.mytaxes.domen.model.MonthlyStats
-import com.gmail.vanyadubik.mytaxes.domen.model.TaxCalculation
+import com.gmail.vanyadubik.myassistant.domen.model.Expense
+import com.gmail.vanyadubik.myassistant.domen.model.MonthlyStats
+import com.gmail.vanyadubik.myassistant.domen.model.TaxCalculation
 
 /**
  * Groups saved calculations and expenses by calendar month for the dashboard chart.

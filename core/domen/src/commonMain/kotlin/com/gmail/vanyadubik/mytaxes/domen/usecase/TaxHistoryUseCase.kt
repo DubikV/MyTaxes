@@ -1,8 +1,8 @@
-package com.gmail.vanyadubik.mytaxes.domen.usecase
+package com.gmail.vanyadubik.myassistant.domen.usecase
 
-import com.gmail.vanyadubik.mytaxes.domen.model.ResultState
-import com.gmail.vanyadubik.mytaxes.domen.model.TaxCalculation
-import com.gmail.vanyadubik.mytaxes.domen.repository.TaxHistoryRepository
+import com.gmail.vanyadubik.myassistant.domen.model.ResultState
+import com.gmail.vanyadubik.myassistant.domen.model.TaxCalculation
+import com.gmail.vanyadubik.myassistant.domen.repository.TaxHistoryRepository
 
 /** Stores the calculation history of the signed in user in Firebase Cloud Firestore. */
 class TaxHistoryUseCase(

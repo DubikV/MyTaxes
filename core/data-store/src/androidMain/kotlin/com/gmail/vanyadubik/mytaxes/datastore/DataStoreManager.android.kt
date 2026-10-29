@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes.datastore
+package com.gmail.vanyadubik.myassistant.datastore
 
 import android.content.Context
 import androidx.datastore.core.DataStore

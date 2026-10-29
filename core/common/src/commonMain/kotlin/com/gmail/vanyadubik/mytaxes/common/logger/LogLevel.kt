@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes.common.logger
+package com.gmail.vanyadubik.myassistant.common.logger
 
 enum class LogLevel(val priority: Int) {
     VERBOSE(2),

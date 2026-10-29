@@ -1,6 +1,6 @@
-package com.gmail.vanyadubik.mytaxes.push
+package com.gmail.vanyadubik.myassistant.push
 
-import com.gmail.vanyadubik.mytaxes.domen.repository.PushTokenProvider
+import com.gmail.vanyadubik.myassistant.domen.repository.PushTokenProvider
 import com.google.firebase.messaging.FirebaseMessaging
 import java.util.Locale
 import kotlin.coroutines.resume

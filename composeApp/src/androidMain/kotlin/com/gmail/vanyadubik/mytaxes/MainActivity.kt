@@ -1,4 +1,4 @@
-package com.gmail.vanyadubik.mytaxes
+package com.gmail.vanyadubik.myassistant
 
 import android.Manifest
 import android.content.pm.PackageManager

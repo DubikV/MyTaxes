@@ -1,8 +1,8 @@
-package com.gmail.vanyadubik.mytaxes.domen.usecase
+package com.gmail.vanyadubik.myassistant.domen.usecase
 
-import com.gmail.vanyadubik.mytaxes.domen.model.Expense
-import com.gmail.vanyadubik.mytaxes.domen.model.ResultState
-import com.gmail.vanyadubik.mytaxes.domen.repository.ExpenseRepository
+import com.gmail.vanyadubik.myassistant.domen.model.Expense
+import com.gmail.vanyadubik.myassistant.domen.model.ResultState
+import com.gmail.vanyadubik.myassistant.domen.repository.ExpenseRepository
 
 /** Stores the expenses of the signed in user in Firebase Cloud Firestore. */
 class ExpenseUseCase(

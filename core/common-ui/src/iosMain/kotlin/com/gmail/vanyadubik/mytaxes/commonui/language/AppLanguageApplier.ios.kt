@@ -1,6 +1,6 @@
-package com.gmail.vanyadubik.mytaxes.commonui.language
+package com.gmail.vanyadubik.myassistant.commonui.language
 
-import com.gmail.vanyadubik.mytaxes.domen.model.AppLanguage
+import com.gmail.vanyadubik.myassistant.domen.model.AppLanguage
 import platform.Foundation.NSUserDefaults
 
 actual fun applyAppLanguage(language: AppLanguage) {

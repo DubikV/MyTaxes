@@ -1,6 +1,6 @@
-package com.gmail.vanyadubik.mytaxes.di
+package com.gmail.vanyadubik.myassistant.di
 
-import com.gmail.vanyadubik.mytaxes.network.FirebaseConfig
+import com.gmail.vanyadubik.myassistant.network.FirebaseConfig
 
 /**
  * Fill in the values of your Firebase project (Firebase console -> Project settings -> General).

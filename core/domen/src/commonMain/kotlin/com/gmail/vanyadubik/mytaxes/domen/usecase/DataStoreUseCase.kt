@@ -1,10 +1,10 @@
-package com.gmail.vanyadubik.mytaxes.domen.usecase
+package com.gmail.vanyadubik.myassistant.domen.usecase
 
-import com.gmail.vanyadubik.mytaxes.domen.model.AppLanguage
-import com.gmail.vanyadubik.mytaxes.domen.model.AppTheme
-import com.gmail.vanyadubik.mytaxes.domen.model.FopGroup
-import com.gmail.vanyadubik.mytaxes.domen.model.PreferenceKey
-import com.gmail.vanyadubik.mytaxes.domen.repository.DataStoreRepository
+import com.gmail.vanyadubik.myassistant.domen.model.AppLanguage
+import com.gmail.vanyadubik.myassistant.domen.model.AppTheme
+import com.gmail.vanyadubik.myassistant.domen.model.FopGroup
+import com.gmail.vanyadubik.myassistant.domen.model.PreferenceKey
+import com.gmail.vanyadubik.myassistant.domen.repository.DataStoreRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.firstOrNull

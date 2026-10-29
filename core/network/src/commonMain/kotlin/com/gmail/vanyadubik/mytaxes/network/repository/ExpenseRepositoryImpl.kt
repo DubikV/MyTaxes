@@ -1,13 +1,13 @@
-package com.gmail.vanyadubik.mytaxes.network.repository
+package com.gmail.vanyadubik.myassistant.network.repository
 
-import com.gmail.vanyadubik.mytaxes.domen.model.Expense
-import com.gmail.vanyadubik.mytaxes.domen.model.ResultState
-import com.gmail.vanyadubik.mytaxes.domen.repository.ExpenseRepository
-import com.gmail.vanyadubik.mytaxes.network.ApiException
-import com.gmail.vanyadubik.mytaxes.network.FirebaseConfig
-import com.gmail.vanyadubik.mytaxes.network.apiCall
-import com.gmail.vanyadubik.mytaxes.network.bodyOrThrow
-import com.gmail.vanyadubik.mytaxes.network.string
+import com.gmail.vanyadubik.myassistant.domen.model.Expense
+import com.gmail.vanyadubik.myassistant.domen.model.ResultState
+import com.gmail.vanyadubik.myassistant.domen.repository.ExpenseRepository
+import com.gmail.vanyadubik.myassistant.network.ApiException
+import com.gmail.vanyadubik.myassistant.network.FirebaseConfig
+import com.gmail.vanyadubik.myassistant.network.apiCall
+import com.gmail.vanyadubik.myassistant.network.bodyOrThrow
+import com.gmail.vanyadubik.myassistant.network.string
 import io.ktor.client.HttpClient
 import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.delete
