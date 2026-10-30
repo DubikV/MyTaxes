@@ -38,14 +38,16 @@ import com.gmail.vanyadubik.myassistant.commonui.ui.dialog.ConfirmBottomSheet
 import com.gmail.vanyadubik.myassistant.commonui.utils.formatNumber
 import com.gmail.vanyadubik.myassistant.featurehome.model.HomeUiState
 import com.gmail.vanyadubik.myassistant.resource.Res
+import com.gmail.vanyadubik.myassistant.resource.amount_to_pay_format
 import com.gmail.vanyadubik.myassistant.resource.auto_service_title
 import com.gmail.vanyadubik.myassistant.resource.currency_uah
 import com.gmail.vanyadubik.myassistant.resource.home_sign_in_prompt
-import com.gmail.vanyadubik.myassistant.resource.home_title
 import com.gmail.vanyadubik.myassistant.resource.no_cars
 import com.gmail.vanyadubik.myassistant.resource.oops_error_title
+import com.gmail.vanyadubik.myassistant.resource.quantity_format
 import com.gmail.vanyadubik.myassistant.resource.retry
 import com.gmail.vanyadubik.myassistant.resource.sign_in
+import com.gmail.vanyadubik.myassistant.resource.total_amount_format
 import com.gmail.vanyadubik.myassistant.resource.unpaid_taxes
 import com.gmail.vanyadubik.myassistant.resource.unregistered_incomes
 import org.jetbrains.compose.resources.stringResource
@@ -95,7 +97,7 @@ private fun HomeContent(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(Res.string.home_title)) },
+                title = {},
                 actions = { AppBarActions() },
             )
         }
@@ -170,8 +172,18 @@ private fun HomeContent(
                                                 color = MaterialTheme.colorScheme.onErrorContainer,
                                             )
                                             Text(
-                                                "Кількість: ${state.untaxedIncomes.size}",
+                                                stringResource(
+                                                    Res.string.total_amount_format,
+                                                    state.totalUntaxedIncomeAmount.formatNumber(),
+                                                    stringResource(Res.string.currency_uah),
+                                                ),
                                                 style = MaterialTheme.typography.bodyMedium,
+                                                fontWeight = FontWeight.SemiBold,
+                                                color = MaterialTheme.colorScheme.onErrorContainer,
+                                            )
+                                            Text(
+                                                stringResource(Res.string.quantity_format, state.untaxedIncomes.size),
+                                                style = MaterialTheme.typography.bodySmall,
                                                 color = MaterialTheme.colorScheme.onErrorContainer,
                                             )
                                         }
@@ -216,8 +228,18 @@ private fun HomeContent(
                                                 color = MaterialTheme.colorScheme.onTertiaryContainer,
                                             )
                                             Text(
-                                                "До сплати: ${state.totalUnpaidTaxAmount.formatNumber()} ${stringResource(Res.string.currency_uah)}",
+                                                stringResource(
+                                                    Res.string.amount_to_pay_format,
+                                                    state.totalUnpaidTaxAmount.formatNumber(),
+                                                    stringResource(Res.string.currency_uah),
+                                                ),
                                                 style = MaterialTheme.typography.bodyMedium,
+                                                fontWeight = FontWeight.SemiBold,
+                                                color = MaterialTheme.colorScheme.onTertiaryContainer,
+                                            )
+                                            Text(
+                                                stringResource(Res.string.quantity_format, state.unpaidTaxes.size),
+                                                style = MaterialTheme.typography.bodySmall,
                                                 color = MaterialTheme.colorScheme.onTertiaryContainer,
                                             )
                                         }

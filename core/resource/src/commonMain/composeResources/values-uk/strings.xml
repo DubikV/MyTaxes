@@ -151,5 +151,8 @@
     <string name="no_incomes_history">Історія доходів порожня</string>
     <string name="unpaid_taxes">Неоплачені податки</string>
     <string name="currency_uah">грн</string>
+    <string name="total_amount_format">Сума: %1$s %2$s</string>
+    <string name="amount_to_pay_format">До сплати: %1$s %2$s</string>
+    <string name="quantity_format">Кількість: %1$d</string>
     <string name="close">Закрити</string>
 </resources>

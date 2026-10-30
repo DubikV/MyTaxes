@@ -151,5 +151,8 @@
     <string name="no_incomes_history">Income history is empty</string>
     <string name="unpaid_taxes">Unpaid taxes</string>
     <string name="currency_uah">UAH</string>
+    <string name="total_amount_format">Amount: %1$s %2$s</string>
+    <string name="amount_to_pay_format">To pay: %1$s %2$s</string>
+    <string name="quantity_format">Quantity: %1$d</string>
     <string name="close">Close</string>
 </resources>

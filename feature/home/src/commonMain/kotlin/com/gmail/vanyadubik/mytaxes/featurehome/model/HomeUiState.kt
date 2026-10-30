@@ -12,5 +12,8 @@ data class HomeUiState(
     val loadError: String? = null,
     val actionError: String? = null,
 ) {
+    val totalUntaxedIncomeAmount: Double
+        get() = untaxedIncomes.sumOf { if (it.amountUah > 0.0) it.amountUah else it.amount }
+
     val totalUnpaidTaxAmount: Double get() = unpaidTaxes.sumOf { it.totalTax }
 }
