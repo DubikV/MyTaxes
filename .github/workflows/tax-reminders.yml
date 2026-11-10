@@ -11,6 +11,10 @@ on:
         description: "Send even if the reminders were already sent today"
         type: boolean
         default: false
+      test_push:
+        description: "Send a test push to every device regardless of deadlines"
+        type: boolean
+        default: false
       test_date:
         description: "Optional: pretend today is this date (YYYY-MM-DD), e.g. 2026-11-06 is 3 days before a deadline"
         type: string
@@ -31,4 +35,5 @@ jobs:
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
           FORCE: ${{ inputs.force }}
+          TEST_PUSH: ${{ inputs.test_push }}
           TEST_DATE: ${{ inputs.test_date }}

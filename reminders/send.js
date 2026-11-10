@@ -28,12 +28,37 @@ function startOfDay({ y, m, d }, timeZone) {
   return utc - (local - utc);
 }
 
+function buildMessage(token, title, body) {
+  return {
+    token,
+    // Data-only on Android: the app always gets onMessageReceived (also in background), caches the message
+    // for the in-app list and shows the system notification itself
+    data: { title, body },
+    // High priority wakes a device in Doze mode
+    android: { priority: "high" },
+    apns: {
+      headers: { "apns-priority": "10" },
+      payload: { aps: { alert: { title, body }, sound: "default" } },
+    },
+  };
+}
+
+function testMessage(language, unpaidTax) {
+  const uk = language === "uk";
+  const unpaid = unpaidTax > 0 ? ` ${uk ? "Неоплачено" : "Unpaid"}: ${unpaidTax.toFixed(2)} ₴` : "";
+  return {
+    title: uk ? "Тестове нагадування" : "Test reminder",
+    body: (uk ? "Перевірка push-сповіщень." : "Push notification check.") + unpaid,
+  };
+}
+
 async function main() {
   initializeApp({ credential: cert(JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT)) });
   const db = getFirestore();
   const today = nowIn(TIME_ZONE);
   const dateKey = `${today.y}-${today.m}-${today.d}`;
-  const force = process.env.FORCE === "true" || Boolean(process.env.TEST_DATE);
+  const testPush = process.env.TEST_PUSH === "true";
+  const force = process.env.FORCE === "true" || Boolean(process.env.TEST_DATE) || testPush;
 
   // The workflow is scheduled twice (summer / winter time) and GitHub May delay runs: send once per day
   const marker = db.doc("meta/reminders");
@@ -58,6 +83,12 @@ async function main() {
 
   for (const doc of devices.docs) {
     const { group, language, taxReminderMode, unpaidTax } = doc.data();
+    if (testPush) {
+      const { title, body } = testMessage(language, Number(unpaidTax) || 0);
+      messages.push(buildMessage(doc.id, title, body));
+      owners.push(doc.ref);
+      continue;
+    }
     const mode = taxReminderMode || "as_needed";
     let due = [];
     let isMonthly = false;
@@ -88,18 +119,7 @@ async function main() {
       continue;
     }
     const { title, body } = messageFor(reminders, language, isMonthly, Number(unpaidTax) || 0);
-    messages.push({
-      token: doc.id,
-      // Data-only on Android: the app always gets onMessageReceived (also in background), caches the message
-      // for the in-app list and shows the system notification itself
-      data: { title, body },
-      // High priority wakes a device in Doze mode
-      android: { priority: "high" },
-      apns: {
-        headers: { "apns-priority": "10" },
-        payload: { aps: { alert: { title, body }, sound: "default" } },
-      },
-    });
+    messages.push(buildMessage(doc.id, title, body));
     owners.push(doc.ref);
   }
 
