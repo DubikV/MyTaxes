@@ -13,9 +13,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.DirectionsCar
-import androidx.compose.material.icons.filled.HourglassEmpty
 import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Payment
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Card
@@ -39,22 +37,16 @@ import com.gmail.vanyadubik.myassistant.commonui.ui.components.AppBarActions
 import com.gmail.vanyadubik.myassistant.commonui.ui.components.button.AppButton
 import com.gmail.vanyadubik.myassistant.commonui.ui.components.card.ErrorContainerCard
 import com.gmail.vanyadubik.myassistant.commonui.ui.dialog.ConfirmBottomSheet
-import com.gmail.vanyadubik.myassistant.commonui.utils.formatNumber
 import com.gmail.vanyadubik.myassistant.featurehome.model.HomeUiState
 import com.gmail.vanyadubik.myassistant.resource.Res
-import com.gmail.vanyadubik.myassistant.resource.amount_to_pay_format
 import com.gmail.vanyadubik.myassistant.resource.auto_service_title
-import com.gmail.vanyadubik.myassistant.resource.currency_uah
+import com.gmail.vanyadubik.myassistant.resource.taxes_overview_title
 import com.gmail.vanyadubik.myassistant.resource.home_sign_in_prompt
 import com.gmail.vanyadubik.myassistant.resource.no_cars
 import com.gmail.vanyadubik.myassistant.resource.notifications_title
 import com.gmail.vanyadubik.myassistant.resource.oops_error_title
-import com.gmail.vanyadubik.myassistant.resource.quantity_format
 import com.gmail.vanyadubik.myassistant.resource.retry
 import com.gmail.vanyadubik.myassistant.resource.sign_in
-import com.gmail.vanyadubik.myassistant.resource.total_amount_format
-import com.gmail.vanyadubik.myassistant.resource.unpaid_taxes
-import com.gmail.vanyadubik.myassistant.resource.unregistered_incomes
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -163,119 +155,21 @@ private fun HomeContent(
                             }
                         }
                     } else {
-                        // 1. Untaxed Incomes Card
-                        if (state.untaxedIncomes.isNotEmpty()) {
-                            Card(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable { onOpenTaxes() },
-                                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer),
-                            ) {
-                                Row(
-                                    modifier = Modifier.padding(16.dp).fillMaxWidth(),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                ) {
-                                    Row(
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                                        modifier = Modifier.weight(1f),
-                                    ) {
-                                        Icon(
-                                            Icons.Default.HourglassEmpty,
-                                            contentDescription = null,
-                                            tint = MaterialTheme.colorScheme.onErrorContainer,
-                                        )
-                                        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                                            Text(
-                                                stringResource(Res.string.unregistered_incomes),
-                                                style = MaterialTheme.typography.titleMedium,
-                                                fontWeight = FontWeight.Bold,
-                                                color = MaterialTheme.colorScheme.onErrorContainer,
-                                            )
-                                            Text(
-                                                stringResource(
-                                                    Res.string.total_amount_format,
-                                                    state.totalUntaxedIncomeAmount.formatNumber(),
-                                                    stringResource(Res.string.currency_uah),
-                                                ),
-                                                style = MaterialTheme.typography.bodyMedium,
-                                                fontWeight = FontWeight.SemiBold,
-                                                color = MaterialTheme.colorScheme.onErrorContainer,
-                                            )
-                                            Text(
-                                                stringResource(Res.string.quantity_format, state.untaxedIncomes.size),
-                                                style = MaterialTheme.typography.bodySmall,
-                                                color = MaterialTheme.colorScheme.onErrorContainer,
-                                            )
-                                        }
-                                    }
-                                    Icon(
-                                        Icons.Default.ChevronRight,
-                                        contentDescription = null,
-                                        tint = MaterialTheme.colorScheme.onErrorContainer,
-                                    )
-                                }
-                            }
+                        // 1. Taxes overview (unpaid breakdown, paid progress, untaxed incomes)
+                        if (state.calculatedTaxes.isNotEmpty() || state.untaxedIncomes.isNotEmpty()) {
+                            Text(
+                                stringResource(Res.string.taxes_overview_title),
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold,
+                            )
+                            TaxesOverviewCard(
+                                state = state,
+                                onOpenTaxes = onOpenTaxes,
+                                onOpenTaxesHistory = onOpenTaxesHistory,
+                            )
                         }
 
-                        // 2. Unpaid Taxes Card
-                        if (state.unpaidTaxes.isNotEmpty()) {
-                            Card(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable { onOpenTaxesHistory() },
-                                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer),
-                            ) {
-                                Row(
-                                    modifier = Modifier.padding(16.dp).fillMaxWidth(),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                ) {
-                                    Row(
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                                        modifier = Modifier.weight(1f),
-                                    ) {
-                                        Icon(
-                                            Icons.Default.Payment,
-                                            contentDescription = null,
-                                            tint = MaterialTheme.colorScheme.onTertiaryContainer,
-                                        )
-                                        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                                            Text(
-                                                stringResource(Res.string.unpaid_taxes),
-                                                style = MaterialTheme.typography.titleMedium,
-                                                fontWeight = FontWeight.Bold,
-                                                color = MaterialTheme.colorScheme.onTertiaryContainer,
-                                            )
-                                            Text(
-                                                stringResource(
-                                                    Res.string.amount_to_pay_format,
-                                                    state.totalUnpaidTaxAmount.formatNumber(),
-                                                    stringResource(Res.string.currency_uah),
-                                                ),
-                                                style = MaterialTheme.typography.bodyMedium,
-                                                fontWeight = FontWeight.SemiBold,
-                                                color = MaterialTheme.colorScheme.onTertiaryContainer,
-                                            )
-                                            Text(
-                                                stringResource(Res.string.quantity_format, state.unpaidTaxes.size),
-                                                style = MaterialTheme.typography.bodySmall,
-                                                color = MaterialTheme.colorScheme.onTertiaryContainer,
-                                            )
-                                        }
-                                    }
-                                    Icon(
-                                        Icons.Default.ChevronRight,
-                                        contentDescription = null,
-                                        tint = MaterialTheme.colorScheme.onTertiaryContainer,
-                                    )
-                                }
-                            }
-                        }
-
-                        // 3. Cars Section
+                        // 2. Cars Section
                         Text(
                             stringResource(Res.string.auto_service_title),
                             style = MaterialTheme.typography.titleMedium,

@@ -33,14 +33,14 @@ private val ChartHeight = 160.dp
 
 /** Grouped bar chart: income, taxes and expenses for every month. */
 @Composable
-fun MonthlyChart(stats: List<MonthlyStats>, modifier: Modifier = Modifier) {
+fun MonthlyChart(stats: List<MonthlyStats>, modifier: Modifier = Modifier, showExpenses: Boolean = true) {
     val maxValue = stats.maxOf { maxOf(it.income, it.tax, it.expenses) }.coerceAtLeast(1.0)
 
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
             LegendItem(IncomeColor, stringResource(Res.string.chart_income))
             LegendItem(TaxColor, stringResource(Res.string.chart_tax))
-            LegendItem(ExpenseColor, stringResource(Res.string.chart_expenses))
+            if (showExpenses) LegendItem(ExpenseColor, stringResource(Res.string.chart_expenses))
         }
         Text("${maxValue.formatNumber(0)} UAH", style = MaterialTheme.typography.labelSmall)
         Row(
@@ -57,7 +57,7 @@ fun MonthlyChart(stats: List<MonthlyStats>, modifier: Modifier = Modifier) {
                     ) {
                         Bar(month.income / maxValue, IncomeColor)
                         Bar(month.tax / maxValue, TaxColor)
-                        Bar(month.expenses / maxValue, ExpenseColor)
+                        if (showExpenses) Bar(month.expenses / maxValue, ExpenseColor)
                     }
                     Text(
                         "${month.month.toString().padStart(2, '0')}.${(month.year % 100).toString().padStart(2, '0')}",

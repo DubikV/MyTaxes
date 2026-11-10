@@ -169,4 +169,10 @@
     <string name="notifications_mark_all_read">Mark all as read</string>
     <string name="notifications_clear_all">Clear all notifications</string>
     <string name="notifications_clear_message">All notifications will be deleted permanently.</string>
+    <string name="taxes_overview_title">Taxes</string>
+    <string name="taxes_paid_of_format">Paid %1$s of %2$s %3$s</string>
+    <string name="all_taxes_paid">All taxes are paid</string>
+    <string name="chart_income_tax_title">Income and taxes by month</string>
+    <string name="income_net">Remains</string>
+    <string name="income_total_label">Income</string>
 </resources>

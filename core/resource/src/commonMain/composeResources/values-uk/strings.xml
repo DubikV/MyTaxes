@@ -169,4 +169,10 @@
     <string name="notifications_mark_all_read">Позначити всі прочитаними</string>
     <string name="notifications_clear_all">Очистити всі сповіщення</string>
     <string name="notifications_clear_message">Усі сповіщення буде видалено назавжди.</string>
+    <string name="taxes_overview_title">Податки</string>
+    <string name="taxes_paid_of_format">Сплачено %1$s з %2$s %3$s</string>
+    <string name="all_taxes_paid">Усі податки сплачено</string>
+    <string name="chart_income_tax_title">Доходи та податки по місяцях</string>
+    <string name="income_net">Залишок</string>
+    <string name="income_total_label">Дохід</string>
 </resources>
