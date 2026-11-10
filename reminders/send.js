@@ -7,6 +7,7 @@ const { remindersFor, monthlyRemindersFor, isLastDayOfMonth, messageFor } = requ
 
 const TIME_ZONE = "Europe/Kyiv";
 const SEND_FROM_HOUR = 9;
+const PAYMENT_KINDS = ["monthlyTax", "quarterTax", "esv"];
 const STALE_TOKEN_ERRORS = [
   "messaging/registration-token-not-registered",
   "messaging/invalid-registration-token",
@@ -42,6 +43,7 @@ async function main() {
   }
 
   const devices = await db.collectionGroup("devices").get();
+  console.log(`Devices: ${devices.size}`);
   const messages = [];
   const owners = [];
   // Calculating the taxes counts as paying them: skip the deadlines the user has already calculated
@@ -61,17 +63,30 @@ async function main() {
     let isMonthly = false;
 
     if (mode === "monthly") {
-      if (!isLastDayOfMonth(today)) continue;
+      if (!isLastDayOfMonth(today)) {
+        console.log(`Skipped ${doc.id.slice(0, 8)}: monthly mode, not the last day of the month`);
+        continue;
+      }
       due = monthlyRemindersFor(today, group);
       isMonthly = true;
     } else {
       due = remindersFor(today, group);
     }
 
-    if (due.length === 0) continue;
+    if (due.length === 0) {
+      console.log(`Skipped ${doc.id.slice(0, 8)}: no deadline for group ${group}`);
+      continue;
+    }
     const lastAt = await lastCalculationAt(doc.ref.parent.parent.id);
-    const reminders = due.filter((r) => lastAt < startOfDay(r.paidSince, TIME_ZONE));
-    if (reminders.length === 0) continue;
+    // The app reports the unpaid amount: payment reminders depend on it, not on the last calculation
+    const knowsUnpaid = typeof unpaidTax === "number";
+    const reminders = due.filter((r) =>
+      knowsUnpaid && PAYMENT_KINDS.includes(r.kind) ? unpaidTax > 0 : lastAt < startOfDay(r.paidSince, TIME_ZONE),
+    );
+    if (reminders.length === 0) {
+      console.log(`Skipped ${doc.id.slice(0, 8)}: ${due.map((r) => r.kind).join(", ")} already paid/calculated (unpaidTax=${unpaidTax})`);
+      continue;
+    }
     const { title, body } = messageFor(reminders, language, isMonthly, Number(unpaidTax) || 0);
     messages.push({
       token: doc.id,
