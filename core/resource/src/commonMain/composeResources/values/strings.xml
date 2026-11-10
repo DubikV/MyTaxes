@@ -175,4 +175,5 @@
     <string name="chart_income_tax_title">Income and taxes by month</string>
     <string name="income_net">Remains</string>
     <string name="income_total_label">Income</string>
+    <string name="days_to_deadline_format">Days until the deadline: %1$d</string>
 </resources>

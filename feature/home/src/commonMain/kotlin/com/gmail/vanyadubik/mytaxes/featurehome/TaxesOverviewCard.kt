@@ -46,6 +46,7 @@ import com.gmail.vanyadubik.myassistant.resource.tax_type_esv
 import com.gmail.vanyadubik.myassistant.resource.tax_type_military
 import com.gmail.vanyadubik.myassistant.resource.tax_type_single
 import com.gmail.vanyadubik.myassistant.resource.taxes_paid_of_format
+import com.gmail.vanyadubik.myassistant.resource.days_to_deadline_format
 import com.gmail.vanyadubik.myassistant.resource.total_amount_format
 import com.gmail.vanyadubik.myassistant.resource.unpaid_taxes
 import com.gmail.vanyadubik.myassistant.resource.unregistered_incomes
@@ -261,13 +262,19 @@ private fun PaidProgress(state: HomeUiState, uah: String) {
     }
 }
 
+/** Green when the deadline is a month away or more, through yellow and orange to red on the deadline day. */
+private fun urgencyColor(daysLeft: Int?): Color {
+    val fraction = ((daysLeft ?: 30).coerceIn(0, 30)) / 30f
+    return Color.hsv(fraction * 125f, 0.75f, 0.55f)
+}
+
 @Composable
 private fun UntaxedRow(state: HomeUiState, uah: String, onClick: () -> Unit) {
     Surface(
         onClick = onClick,
         shape = RoundedCornerShape(14.dp),
-        color = MaterialTheme.colorScheme.errorContainer,
-        contentColor = MaterialTheme.colorScheme.onErrorContainer,
+        color = urgencyColor(state.daysToDeadline),
+        contentColor = Color.White,
     ) {
         Row(
             modifier = Modifier.padding(12.dp).fillMaxWidth(),
@@ -285,6 +292,12 @@ private fun UntaxedRow(state: HomeUiState, uah: String, onClick: () -> Unit) {
                     stringResource(Res.string.total_amount_format, state.totalUntaxedIncomeAmount.formatNumber(), uah),
                     style = MaterialTheme.typography.bodySmall,
                 )
+                state.daysToDeadline?.let {
+                    Text(
+                        stringResource(Res.string.days_to_deadline_format, it),
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                }
             }
             Icon(Icons.Default.ChevronRight, contentDescription = null)
         }

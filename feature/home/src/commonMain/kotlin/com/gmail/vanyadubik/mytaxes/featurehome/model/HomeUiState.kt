@@ -12,6 +12,7 @@ data class HomeUiState(
     val unpaidTaxes: List<TaxIncomeItem> = emptyList(),
     val monthlyStats: List<MonthlyStats> = emptyList(),
     val calculatedTaxes: List<TaxIncomeItem> = emptyList(),
+    val daysToDeadline: Int? = null,
     val cars: List<Car> = emptyList(),
     val hasPushMessages: Boolean = false,
     val hasUnreadPushMessages: Boolean = false,

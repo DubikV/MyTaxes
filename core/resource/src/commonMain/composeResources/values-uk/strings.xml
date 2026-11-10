@@ -175,4 +175,5 @@
     <string name="chart_income_tax_title">Доходи та податки по місяцях</string>
     <string name="income_net">Залишок</string>
     <string name="income_total_label">Дохід</string>
+    <string name="days_to_deadline_format">Днів до дедлайну: %1$d</string>
 </resources>

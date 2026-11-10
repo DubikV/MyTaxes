@@ -2,11 +2,15 @@ package com.gmail.vanyadubik.myassistant.featurehome
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gmail.vanyadubik.myassistant.domen.model.FopGroup
 import com.gmail.vanyadubik.myassistant.domen.model.MonthlyStats
+import com.gmail.vanyadubik.myassistant.domen.model.TaxDeadlines
+import com.gmail.vanyadubik.myassistant.domen.model.TaxReminderMode
 import com.gmail.vanyadubik.myassistant.domen.model.ResultState
 import com.gmail.vanyadubik.myassistant.domen.model.TaxIncomeItem
 import com.gmail.vanyadubik.myassistant.domen.usecase.AccountUseCase
 import com.gmail.vanyadubik.myassistant.domen.usecase.AuthUseCase
+import com.gmail.vanyadubik.myassistant.domen.usecase.DataStoreUseCase
 import com.gmail.vanyadubik.myassistant.domen.usecase.PushMessagesUseCase
 import com.gmail.vanyadubik.myassistant.domen.usecase.TaxesUseCase
 import com.gmail.vanyadubik.myassistant.featurehome.model.HomeUiState
@@ -25,11 +29,22 @@ class HomeViewModel(
     private val authUseCase: AuthUseCase,
     private val taxesUseCase: TaxesUseCase,
     private val accountUseCase: AccountUseCase,
+    private val dataStoreUseCase: DataStoreUseCase,
     private val pushMessagesUseCase: PushMessagesUseCase,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(HomeUiState())
     val state: StateFlow<HomeUiState> = _state.asStateFlow()
+
+    private var fopGroup = FopGroup.GROUP_3_5
+    private var reminderMode = TaxReminderMode.AS_NEEDED
+
+    private fun updateDeadline() {
+        val today = Clock.System.todayIn(TimeZone.currentSystemDefault())
+        val oldest = _state.value.untaxedIncomes.minOfOrNull { it.date }
+        val deadline = TaxDeadlines.forUntaxed(today, fopGroup, reminderMode, oldest)
+        _state.update { it.copy(daysToDeadline = (deadline.toEpochDays() - today.toEpochDays()).toInt()) }
+    }
 
     private var lastAction: (() -> Unit)? = null
 
@@ -55,6 +70,21 @@ class HomeViewModel(
                         calculatedTaxes = incomes.filter { item -> item.isTaxCalculated },
                     )
                 }
+                updateDeadline()
+            }
+        }
+
+        viewModelScope.launch {
+            dataStoreUseCase.fopGroup.collect { group ->
+                fopGroup = group
+                updateDeadline()
+            }
+        }
+
+        viewModelScope.launch {
+            accountUseCase.savedTaxReminderMode.collect { mode ->
+                reminderMode = mode ?: TaxReminderMode.AS_NEEDED
+                updateDeadline()
             }
         }
 
