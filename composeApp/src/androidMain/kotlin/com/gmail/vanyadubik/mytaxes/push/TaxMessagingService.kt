@@ -9,6 +9,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.gmail.vanyadubik.myassistant.MainActivity
 import com.gmail.vanyadubik.myassistant.R
+import com.gmail.vanyadubik.myassistant.domen.usecase.PushMessagesUseCase
 import com.gmail.vanyadubik.myassistant.domen.usecase.PushNotificationUseCase
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -29,7 +30,12 @@ class TaxMessagingService : FirebaseMessagingService() {
      * notification messages by itself.
      */
     override fun onMessageReceived(message: RemoteMessage) {
-        val notification = message.notification ?: return
+        val title = message.notification?.title ?: message.data["title"]
+        val body = message.notification?.body ?: message.data["body"]
+        if (title.isNullOrBlank() && body.isNullOrBlank()) return
+        GlobalContext.getOrNull()?.let { koin ->
+            koin.get<CoroutineScope>().launch { koin.get<PushMessagesUseCase>().add(title, body, message.messageId) }
+        }
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) !=
             PackageManager.PERMISSION_GRANTED
         ) return
@@ -39,9 +45,9 @@ class TaxMessagingService : FirebaseMessagingService() {
         )
         val built = NotificationCompat.Builder(this, REMINDER_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notification)
-            .setContentTitle(notification.title)
-            .setContentText(notification.body)
-            .setStyle(NotificationCompat.BigTextStyle().bigText(notification.body))
+            .setContentTitle(title)
+            .setContentText(body)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(body))
             .setAutoCancel(true)
             .setContentIntent(intent)
             .build()

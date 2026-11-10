@@ -32,6 +32,7 @@ kotlin {
             implementation(projects.feature.home)
             implementation(projects.feature.taxes)
             implementation(projects.feature.auto)
+            implementation(projects.feature.notifications)
         }
         androidMain.dependencies {
             implementation(libs.androidx.core.splashscreen)
@@ -50,12 +51,26 @@ android {
     namespace = "com.gmail.vanyadubik.myassistant"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    buildFeatures {
+        buildConfig = true
+    }
+
     defaultConfig {
         applicationId = "com.gmail.vanyadubik.myassistant"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 101
         versionName = "1.0.1"
+
+        buildConfigField("String", "FIREBASE_APP_ID", "\"1:81447438385:android:2cf1e7ece7e23b7745ed10\"")
+        buildConfigField("String", "FIREBASE_API_KEY", "\"AIzaSyDu4pSNq8pKeFbVYjgGXJS1_pcFCT8E21I\"")
+        buildConfigField("String", "FIREBASE_PROJECT_ID", "\"mytaxes-53780\"")
+        buildConfigField("String", "FIREBASE_GCM_SENDER_ID", "\"81447438385\"")
     }
     packaging {
         resources {

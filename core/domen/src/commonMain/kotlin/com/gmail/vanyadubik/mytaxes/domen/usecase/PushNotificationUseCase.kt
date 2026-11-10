@@ -16,6 +16,7 @@ class PushNotificationUseCase(
     private val dataStoreUseCase: DataStoreUseCase,
     private val deviceRepository: DeviceRepository,
     private val tokenProvider: PushTokenProvider,
+    private val taxesUseCase: TaxesUseCase,
 ) {
     /** Registers (or refreshes the group / language / reminder mode of) the device; [token] is the new token when FCM rotated it. */
     suspend fun register(token: String? = null, taxReminderMode: TaxReminderMode? = null) {
@@ -27,9 +28,20 @@ class PushNotificationUseCase(
             language = language,
             group = dataStoreUseCase.fopGroup.first(),
             taxReminderMode = taxReminderMode ?: TaxReminderMode.AS_NEEDED,
+            unpaidTax = unpaidTax(),
         )
         withSession { userId, idToken -> deviceRepository.register(userId, idToken, device) }
     }
+
+    /** Tells the backend how much tax is still unpaid, so the reminders can name it. */
+    suspend fun syncUnpaidTax() {
+        val fcmToken = tokenProvider.getToken() ?: return
+        val amount = unpaidTax()
+        withSession { userId, idToken -> deviceRepository.updateUnpaidTax(userId, idToken, fcmToken, amount) }
+    }
+
+    private suspend fun unpaidTax() =
+        taxesUseCase.getIncomes().first().filter { it.isTaxCalculated }.sumOf { it.unpaidAmount }
 
     /** Stops the reminders for the current user on this device; call before logging out. */
     suspend fun unregister() {

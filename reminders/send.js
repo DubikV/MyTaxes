@@ -7,7 +7,6 @@ const { remindersFor, monthlyRemindersFor, isLastDayOfMonth, messageFor } = requ
 
 const TIME_ZONE = "Europe/Kyiv";
 const SEND_FROM_HOUR = 9;
-const CHANNEL_ID = "tax_reminders"; // created by the Android app
 const STALE_TOKEN_ERRORS = [
   "messaging/registration-token-not-registered",
   "messaging/invalid-registration-token",
@@ -56,7 +55,7 @@ async function main() {
   };
 
   for (const doc of devices.docs) {
-    const { group, language, taxReminderMode } = doc.data();
+    const { group, language, taxReminderMode, unpaidTax } = doc.data();
     const mode = taxReminderMode || "as_needed";
     let due = [];
     let isMonthly = false;
@@ -73,13 +72,18 @@ async function main() {
     const lastAt = await lastCalculationAt(doc.ref.parent.parent.id);
     const reminders = due.filter((r) => lastAt < startOfDay(r.paidSince, TIME_ZONE));
     if (reminders.length === 0) continue;
-    const { title, body } = messageFor(reminders, language, isMonthly);
+    const { title, body } = messageFor(reminders, language, isMonthly, Number(unpaidTax) || 0);
     messages.push({
       token: doc.id,
-      notification: { title, body },
+      // Data-only on Android: the app always gets onMessageReceived (also in background), caches the message
+      // for the in-app list and shows the system notification itself
+      data: { title, body },
       // High priority wakes a device in Doze mode
-      android: { priority: "high", notification: { channelId: CHANNEL_ID } },
-      apns: { headers: { "apns-priority": "10" }, payload: { aps: { sound: "default" } } },
+      android: { priority: "high" },
+      apns: {
+        headers: { "apns-priority": "10" },
+        payload: { aps: { alert: { title, body }, sound: "default" } },
+      },
     });
     owners.push(doc.ref);
   }

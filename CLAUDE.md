@@ -57,6 +57,7 @@ Dependencies flow downwards: `composeApp → feature:* → core:common-ui / core
   - `rememberPhotoPickerLauncher`: Presents a `ModalBottomSheet` on Android offering choice between Camera (`ActivityResultContracts.TakePicturePreview()`) and Gallery (`ActivityResultContracts.GetContent()`). Photos are resized (800px max) and compressed to JPEG Base64.
   - `PhotoPreviewDialog`: Full-screen dialog with dark background, pinch-to-zoom (1x–5x), pan dragging, double-tap zoom toggle, single tap or close button to dismiss.
   - `AppAsyncImage`: Supports `onClick` for opening preview, and `onDelete` badge protruding outside the top-right image edge.
+- **No Hardcoded Keys or Secrets in Code**: Never hardcode Firebase keys, App IDs, API keys, or environment secrets directly in Kotlin source files. Always configure them via `buildConfigField` in `build.gradle.kts` and access via generated `BuildConfig`.
 - **Navigation**: Defined in `composeApp/.../navigation/AppNavigation.kt`. Bottom `NavigationBar` switches between 4 tabs: **Home**, **Taxes**, **Auto**, and **Account** (or "Sign in" for guests).
 - Localization: English (`values/`) and Ukrainian (`values-uk/`) in `core:resource`; add every new string to both files. Strings go to `strings.xml`, accessed with `stringResource(Res.string.x)`.
 - Money is shown with `Double.formatNumber()` (`core:common-ui/utils/Format.kt`), dates with `LocalDate.formatDate()`.

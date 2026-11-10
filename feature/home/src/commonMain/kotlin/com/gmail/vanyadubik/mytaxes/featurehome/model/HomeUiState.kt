@@ -9,11 +9,13 @@ data class HomeUiState(
     val untaxedIncomes: List<TaxIncomeItem> = emptyList(),
     val unpaidTaxes: List<TaxIncomeItem> = emptyList(),
     val cars: List<Car> = emptyList(),
+    val hasPushMessages: Boolean = false,
+    val hasUnreadPushMessages: Boolean = false,
     val loadError: String? = null,
     val actionError: String? = null,
 ) {
     val totalUntaxedIncomeAmount: Double
         get() = untaxedIncomes.sumOf { if (it.amountUah > 0.0) it.amountUah else it.amount }
 
-    val totalUnpaidTaxAmount: Double get() = unpaidTaxes.sumOf { it.totalTax }
+    val totalUnpaidTaxAmount: Double get() = unpaidTaxes.sumOf { it.unpaidAmount }
 }

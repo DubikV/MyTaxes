@@ -3,6 +3,7 @@ package com.gmail.vanyadubik.myassistant.featuretaxes.screens.history
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gmail.vanyadubik.myassistant.domen.model.ResultState
+import com.gmail.vanyadubik.myassistant.domen.model.TaxType
 import com.gmail.vanyadubik.myassistant.domen.usecase.DataStoreUseCase
 import com.gmail.vanyadubik.myassistant.domen.usecase.TaxesUseCase
 import com.gmail.vanyadubik.myassistant.featuretaxes.screens.history.model.TaxesHistoryUiState
@@ -93,12 +94,42 @@ class TaxesHistoryViewModel(
         val current = _state.value
         val calculation = taxesUseCase.getPaymentCalculation(current.selectedIds, current.incomes, current.group)
         if (calculation != null) {
-            _state.update { it.copy(calculationResult = calculation) }
+            val ids = current.selectedIds.ifEmpty {
+                current.incomes.filter { it.isTaxCalculated && !it.isPaid }.map { it.id }.toSet()
+            }
+            val types = TaxType.entries.filter { type -> current.incomes.any { it.id in ids && it.unpaidAmount(type) > 0.0 } }
+            _state.update {
+                it.copy(calculationResult = calculation, payIds = ids, payTypes = types.toSet())
+            }
         }
     }
 
+    fun togglePayType(type: TaxType) {
+        _state.update { s ->
+            s.copy(payTypes = if (type in s.payTypes) s.payTypes - type else s.payTypes + type)
+        }
+    }
+
+    fun markPaid() {
+        val current = _state.value
+        val ids = current.payIds ?: return
+        val types = current.payTypes
+        _state.update { it.copy(calculationResult = null, payIds = null, payTypes = emptySet(), selectedIds = emptySet()) }
+        if (types.isNotEmpty()) {
+            viewModelScope.launch { taxesUseCase.setPaid(ids, types, paid = true) }
+        }
+    }
+
+    fun markUnpaid() {
+        val ids = _state.value.selectedIds
+        _state.update { it.copy(selectedIds = emptySet()) }
+        viewModelScope.launch { taxesUseCase.setPaid(ids, TaxType.entries.toSet(), paid = false) }
+    }
+
     fun dismissCalculationResult() {
-        _state.update { it.copy(calculationResult = null, selectedIds = emptySet()) }
+        _state.update {
+            it.copy(calculationResult = null, payIds = null, payTypes = emptySet(), selectedIds = emptySet())
+        }
     }
 
     fun retryLastAction() {

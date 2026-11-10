@@ -14,11 +14,15 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.DirectionsCar
 import androidx.compose.material.icons.filled.HourglassEmpty
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Payment
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -43,6 +47,7 @@ import com.gmail.vanyadubik.myassistant.resource.auto_service_title
 import com.gmail.vanyadubik.myassistant.resource.currency_uah
 import com.gmail.vanyadubik.myassistant.resource.home_sign_in_prompt
 import com.gmail.vanyadubik.myassistant.resource.no_cars
+import com.gmail.vanyadubik.myassistant.resource.notifications_title
 import com.gmail.vanyadubik.myassistant.resource.oops_error_title
 import com.gmail.vanyadubik.myassistant.resource.quantity_format
 import com.gmail.vanyadubik.myassistant.resource.retry
@@ -60,6 +65,7 @@ fun HomeScreen(
     onOpenTaxes: () -> Unit,
     onOpenTaxesHistory: () -> Unit,
     onOpenAuto: () -> Unit,
+    onOpenNotifications: () -> Unit,
     viewModel: HomeViewModel = koinViewModel(),
 ) {
     val state by viewModel.state.collectAsState()
@@ -70,6 +76,7 @@ fun HomeScreen(
         onOpenTaxes = onOpenTaxes,
         onOpenTaxesHistory = onOpenTaxesHistory,
         onOpenAuto = onOpenAuto,
+        onOpenNotifications = onOpenNotifications,
         onRefresh = viewModel::load,
     )
 
@@ -92,13 +99,28 @@ private fun HomeContent(
     onOpenTaxes: () -> Unit,
     onOpenTaxesHistory: () -> Unit,
     onOpenAuto: () -> Unit,
+    onOpenNotifications: () -> Unit,
     onRefresh: () -> Unit,
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {},
-                actions = { AppBarActions() },
+                actions = {
+                    if (state.hasPushMessages) {
+                        IconButton(onClick = onOpenNotifications) {
+                            BadgedBox(
+                                badge = { if (state.hasUnreadPushMessages) Badge() },
+                            ) {
+                                Icon(
+                                    Icons.Default.Notifications,
+                                    contentDescription = stringResource(Res.string.notifications_title),
+                                )
+                            }
+                        }
+                    }
+                    AppBarActions()
+                },
             )
         }
     ) { padding ->

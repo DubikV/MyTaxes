@@ -10,6 +10,7 @@ import com.gmail.vanyadubik.myassistant.featureaccount.di.featureAccountModule
 import com.gmail.vanyadubik.myassistant.featureauto.di.featureAutoModule
 import com.gmail.vanyadubik.myassistant.featurehome.di.featureHomeModule
 import com.gmail.vanyadubik.myassistant.featurelogin.di.featureLoginModule
+import com.gmail.vanyadubik.myassistant.featurenotifications.di.featureNotificationsModule
 import com.gmail.vanyadubik.myassistant.featuretaxes.di.featureTaxesModule
 import com.gmail.vanyadubik.myassistant.network.di.networkModule
 import com.gmail.vanyadubik.myassistant.viewmodel.MainViewModel
@@ -54,6 +55,7 @@ public fun initKoin(
                 featureAccountModule(),
                 featureHomeModule(),
                 featureAutoModule(),
+                featureNotificationsModule(),
                 platformModule(),
                 mainModule(),
                 commonUiModule(),

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.gmail.vanyadubik.myassistant.domen.model.ResultState
 import com.gmail.vanyadubik.myassistant.domen.usecase.AccountUseCase
 import com.gmail.vanyadubik.myassistant.domen.usecase.AuthUseCase
+import com.gmail.vanyadubik.myassistant.domen.usecase.PushMessagesUseCase
 import com.gmail.vanyadubik.myassistant.domen.usecase.TaxesUseCase
 import com.gmail.vanyadubik.myassistant.featurehome.model.HomeUiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,6 +18,7 @@ class HomeViewModel(
     private val authUseCase: AuthUseCase,
     private val taxesUseCase: TaxesUseCase,
     private val accountUseCase: AccountUseCase,
+    private val pushMessagesUseCase: PushMessagesUseCase,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(HomeUiState())
@@ -37,7 +39,7 @@ class HomeViewModel(
         viewModelScope.launch {
             taxesUseCase.getIncomes().collect { incomes ->
                 val untaxed = incomes.filterNot { it.isTaxCalculated }
-                val unpaid = incomes.filter { it.isTaxCalculated }
+                val unpaid = incomes.filter { it.isTaxCalculated && !it.isPaid }
                 _state.update {
                     it.copy(
                         untaxedIncomes = untaxed,
@@ -50,6 +52,19 @@ class HomeViewModel(
         viewModelScope.launch {
             accountUseCase.savedCars.collect { cars ->
                 _state.update { it.copy(cars = cars) }
+            }
+        }
+    }
+
+    init {
+        viewModelScope.launch {
+            pushMessagesUseCase.messages.collect { messages ->
+                _state.update {
+                    it.copy(
+                        hasPushMessages = messages.isNotEmpty(),
+                        hasUnreadPushMessages = messages.any { message -> !message.isRead },
+                    )
+                }
             }
         }
     }

@@ -7,6 +7,7 @@ import com.gmail.vanyadubik.myassistant.domen.usecase.CalculateTaxUseCase
 import com.gmail.vanyadubik.myassistant.domen.usecase.DataStoreUseCase
 import com.gmail.vanyadubik.myassistant.domen.usecase.ExpenseUseCase
 import com.gmail.vanyadubik.myassistant.domen.usecase.MonthlyStatsUseCase
+import com.gmail.vanyadubik.myassistant.domen.usecase.PushMessagesUseCase
 import com.gmail.vanyadubik.myassistant.domen.usecase.PushNotificationUseCase
 import com.gmail.vanyadubik.myassistant.domen.usecase.TaxHistoryUseCase
 import com.gmail.vanyadubik.myassistant.domen.usecase.TaxesUseCase
@@ -21,6 +22,7 @@ fun domenModule() = module {
     singleOf(::ExpenseUseCase)
     singleOf(::MonthlyStatsUseCase)
     singleOf(::PushNotificationUseCase)
+    singleOf(::PushMessagesUseCase)
     singleOf(::AccountUseCase)
     singleOf(::TaxesUseCase)
     singleOf(::AutoServiceUseCase)

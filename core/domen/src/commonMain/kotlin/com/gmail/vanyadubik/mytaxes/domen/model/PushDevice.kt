@@ -7,4 +7,5 @@ data class PushDevice(
     val language: String,
     val group: FopGroup,
     val taxReminderMode: TaxReminderMode = TaxReminderMode.AS_NEEDED,
+    val unpaidTax: Double = 0.0,
 )

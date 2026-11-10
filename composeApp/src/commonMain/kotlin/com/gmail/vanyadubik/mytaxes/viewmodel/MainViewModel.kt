@@ -7,10 +7,12 @@ import com.gmail.vanyadubik.myassistant.domen.usecase.AccountUseCase
 import com.gmail.vanyadubik.myassistant.domen.usecase.AuthUseCase
 import com.gmail.vanyadubik.myassistant.domen.usecase.DataStoreUseCase
 import com.gmail.vanyadubik.myassistant.domen.usecase.PushNotificationUseCase
+import com.gmail.vanyadubik.myassistant.domen.usecase.TaxesUseCase
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -19,6 +21,7 @@ class MainViewModel(
     private val dataStoreUseCase: DataStoreUseCase,
     private val pushNotifications: PushNotificationUseCase,
     private val accountUseCase: AccountUseCase,
+    private val taxesUseCase: TaxesUseCase,
     val themeAnimationHandler: ThemeAnimationHandler
 ) : ViewModel() {
 
@@ -35,6 +38,14 @@ class MainViewModel(
         viewModelScope.launch {
             combine(authUseCase.isLoggedIn, dataStoreUseCase.fopGroup, dataStoreUseCase.language) { loggedIn, _, _ -> loggedIn }
                 .collect { loggedIn -> if (loggedIn) pushNotifications.register() }
+        }
+        // Reminders mention the unpaid amount: keep it current whenever incomes are calculated or paid
+        viewModelScope.launch {
+            combine(
+                authUseCase.isLoggedIn,
+                taxesUseCase.getIncomes().map { list -> list.filter { it.isTaxCalculated }.sumOf { it.unpaidAmount } }.distinctUntilChanged(),
+            ) { loggedIn, _ -> loggedIn }
+                .collect { loggedIn -> if (loggedIn) pushNotifications.syncUnpaidTax() }
         }
     }
 }

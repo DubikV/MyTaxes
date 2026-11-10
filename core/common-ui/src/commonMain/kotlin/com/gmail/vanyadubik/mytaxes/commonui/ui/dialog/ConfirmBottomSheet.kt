@@ -1,6 +1,8 @@
 package com.gmail.vanyadubik.myassistant.commonui.ui.dialog
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -39,8 +41,14 @@ fun ConfirmBottomSheet(
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             Text(title, style = MaterialTheme.typography.titleLarge)
-            message?.let { Text(it, style = MaterialTheme.typography.bodyMedium) }
-            content?.invoke()
+            // Only the body scrolls, so the buttons keep their size when the content does not fit the screen
+            Column(
+                modifier = Modifier.weight(1f, fill = false).verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                message?.let { Text(it, style = MaterialTheme.typography.bodyMedium) }
+                content?.invoke()
+            }
             AppButton(text = confirmText, onClick = onConfirm)
             AppButton(text = cancelText, onClick = onDismiss, isOutlinedButton = true)
         }

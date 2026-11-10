@@ -30,6 +30,7 @@ import com.gmail.vanyadubik.myassistant.featureaccount.AccountScreen
 import com.gmail.vanyadubik.myassistant.featureauto.AutoScreen
 import com.gmail.vanyadubik.myassistant.featurehome.HomeScreen
 import com.gmail.vanyadubik.myassistant.featurelogin.LoginScreen
+import com.gmail.vanyadubik.myassistant.featurenotifications.NotificationsScreen
 import com.gmail.vanyadubik.myassistant.featuretaxes.screens.history.TaxesHistoryScreen
 import com.gmail.vanyadubik.myassistant.featuretaxes.screens.taxes.TaxesScreen
 import com.gmail.vanyadubik.myassistant.resource.Res
@@ -48,6 +49,7 @@ sealed class AppScreen(val route: String) {
     data object TaxesHistory : AppScreen("taxes_history")
     data object Auto : AppScreen("auto")
     data object Account : AppScreen("account")
+    data object Notifications : AppScreen("notifications")
 }
 
 @Composable
@@ -126,6 +128,7 @@ fun AppNavigation(viewModel: MainViewModel) {
                     onOpenTaxes = { navController.navigateToTab(AppScreen.Taxes) },
                     onOpenTaxesHistory = { navController.navigate(AppScreen.TaxesHistory.route) },
                     onOpenAuto = { navController.navigateToTab(AppScreen.Auto) },
+                    onOpenNotifications = { navController.navigate(AppScreen.Notifications.route) },
                 )
             }
             composable(AppScreen.Taxes.route) {
@@ -136,6 +139,9 @@ fun AppNavigation(viewModel: MainViewModel) {
             }
             composable(AppScreen.Auto.route) {
                 AutoScreen(onOpenLogin = { navController.navigate(AppScreen.Login.route) })
+            }
+            composable(AppScreen.Notifications.route) {
+                NotificationsScreen(onBack = { navController.popBackStack() })
             }
             composable(AppScreen.Account.route) {
                 AccountScreen()

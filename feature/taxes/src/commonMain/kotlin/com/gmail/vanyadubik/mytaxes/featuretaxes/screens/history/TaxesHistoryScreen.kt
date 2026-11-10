@@ -1,6 +1,16 @@
 package com.gmail.vanyadubik.myassistant.featuretaxes.screens.history
 
 import androidx.compose.foundation.clickable
+import com.gmail.vanyadubik.myassistant.resource.selected_to_pay
+import com.gmail.vanyadubik.myassistant.resource.what_to_pay
+import com.gmail.vanyadubik.myassistant.resource.tax_type_esv
+import com.gmail.vanyadubik.myassistant.resource.tax_type_military
+import com.gmail.vanyadubik.myassistant.resource.tax_type_single
+import com.gmail.vanyadubik.myassistant.resource.partially_paid_status
+import com.gmail.vanyadubik.myassistant.domen.model.TaxCalculation
+import com.gmail.vanyadubik.myassistant.domen.model.TaxType
+import androidx.compose.material3.Checkbox
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +24,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.HourglassEmpty
 import androidx.compose.material.icons.filled.Payment
@@ -60,6 +71,9 @@ import com.gmail.vanyadubik.myassistant.resource.delete_history_title
 import com.gmail.vanyadubik.myassistant.resource.loading
 import com.gmail.vanyadubik.myassistant.resource.no_incomes_history
 import com.gmail.vanyadubik.myassistant.resource.oops_error_title
+import com.gmail.vanyadubik.myassistant.resource.mark_as_paid
+import com.gmail.vanyadubik.myassistant.resource.mark_as_unpaid
+import com.gmail.vanyadubik.myassistant.resource.paid_status
 import com.gmail.vanyadubik.myassistant.resource.pay
 import com.gmail.vanyadubik.myassistant.resource.pay_taxes
 import com.gmail.vanyadubik.myassistant.resource.pay_unpaid
@@ -88,6 +102,7 @@ fun TaxesHistoryScreen(
         onDeleteSelected = { isConfirmDeleteOpen = true },
         onCalculateTaxes = viewModel::calculateTaxes,
         onPayClicked = viewModel::onPayClicked,
+        onMarkUnpaid = viewModel::markUnpaid,
         onRetryLoad = viewModel::load,
     )
 
@@ -107,14 +122,27 @@ fun TaxesHistoryScreen(
     state.calculationResult?.let { result ->
         ConfirmBottomSheet(
             title = stringResource(Res.string.unpaid_taxes),
-            confirmText = stringResource(Res.string.pay),
+            confirmText = stringResource(if (state.payIds != null) Res.string.mark_as_paid else Res.string.pay),
             onConfirm = {
-                viewModel.dismissCalculationResult()
-                viewModel.onPayClicked()
+                if (state.payIds != null) {
+                    viewModel.markPaid()
+                } else {
+                    viewModel.dismissCalculationResult()
+                    viewModel.onPayClicked()
+                }
             },
             onDismiss = viewModel::dismissCalculationResult,
             content = {
-                ResultCard(result = result)
+                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    ResultCard(result = result)
+                    if (state.payIds != null) {
+                        PayTypesSelector(
+                            result = result,
+                            selected = state.payTypes,
+                            onToggle = viewModel::togglePayType,
+                        )
+                    }
+                }
             }
         )
     }
@@ -143,6 +171,7 @@ private fun TaxesHistoryContent(
     onDeleteSelected: () -> Unit,
     onCalculateTaxes: () -> Unit,
     onPayClicked: () -> Unit,
+    onMarkUnpaid: () -> Unit,
     onRetryLoad: () -> Unit,
 ) {
     Scaffold(
@@ -170,17 +199,20 @@ private fun TaxesHistoryContent(
             val selectedIncomes = state.incomes.filter { it.id in state.selectedIds }
             val showCalculateButton: Boolean
             val showPayButton: Boolean
+            val showUnpaidButton: Boolean
 
             if (state.selectedIds.isNotEmpty()) {
                 val hasUntaxedInSelected = selectedIncomes.any { !it.isTaxCalculated }
                 showCalculateButton = hasUntaxedInSelected
-                showPayButton = !hasUntaxedInSelected
+                showPayButton = !hasUntaxedInSelected && selectedIncomes.any { !it.isPaid }
+                showUnpaidButton = !hasUntaxedInSelected && selectedIncomes.any { it.isPaid || it.isPartiallyPaid }
             } else {
                 showCalculateButton = state.incomes.any { !it.isTaxCalculated }
-                showPayButton = state.incomes.any { it.isTaxCalculated }
+                showPayButton = state.incomes.any { it.isTaxCalculated && !it.isPaid }
+                showUnpaidButton = false
             }
 
-            if (showCalculateButton || showPayButton) {
+            if (showCalculateButton || showPayButton || showUnpaidButton) {
                 val isBothButtons = showCalculateButton && showPayButton
 
                 Column(
@@ -209,7 +241,7 @@ private fun TaxesHistoryContent(
 
                     if (showPayButton) {
                         val payCount = if (state.selectedIds.isNotEmpty()) {
-                            selectedIncomes.count { it.isTaxCalculated }
+                            selectedIncomes.count { it.isTaxCalculated && !it.isPaid }
                         } else null
 
                         val payText = if (payCount != null) {
@@ -223,6 +255,14 @@ private fun TaxesHistoryContent(
                             onClick = onPayClicked,
                             leftIcon = Icons.Default.Payment,
                             isOutlinedButton = isBothButtons,
+                        )
+                    }
+
+                    if (showUnpaidButton) {
+                        AppButton(
+                            text = stringResource(Res.string.mark_as_unpaid),
+                            onClick = onMarkUnpaid,
+                            isOutlinedButton = true,
                         )
                     }
                 }
@@ -302,7 +342,7 @@ private fun TaxHistoryItemCard(
                 }
             }
 
-            TaxStatusChip(isTaxCalculated = item.isTaxCalculated)
+            TaxStatusChip(isTaxCalculated = item.isTaxCalculated, isPaid = item.isPaid, isPartiallyPaid = item.isPartiallyPaid)
 
             if (item.isTaxCalculated) {
                 Text(item.group.title(), style = MaterialTheme.typography.bodySmall)
@@ -311,6 +351,23 @@ private fun TaxHistoryItemCard(
                         " × ${item.rate.formatNumber(4)} = ${item.amountUah.formatNumber()} ${stringResource(Res.string.currency_uah)}",
                     style = MaterialTheme.typography.bodySmall,
                 )
+                TaxType.entries.filter { item.amount(it) > 0.0 }.forEach { type ->
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            "${stringResource(type.label())}: ${item.amount(type).formatNumber()} ${stringResource(Res.string.currency_uah)}",
+                            style = MaterialTheme.typography.bodySmall,
+                            modifier = Modifier.weight(1f),
+                        )
+                        if (item.isPaid(type)) {
+                            Icon(
+                                imageVector = Icons.Default.CheckCircle,
+                                contentDescription = stringResource(Res.string.paid_status),
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(16.dp),
+                            )
+                        }
+                    }
+                }
                 Text(
                     "${stringResource(Res.string.total_tax)}: ${item.totalTax.formatNumber()} ${stringResource(Res.string.currency_uah)}",
                     style = MaterialTheme.typography.bodyMedium,
@@ -323,30 +380,86 @@ private fun TaxHistoryItemCard(
 }
 
 @Composable
-private fun TaxStatusChip(isTaxCalculated: Boolean) {
-    Surface(
-        color = if (isTaxCalculated) MaterialTheme.colorScheme.tertiaryContainer
-        else MaterialTheme.colorScheme.errorContainer,
-        shape = MaterialTheme.shapes.small,
-    ) {
+private fun TaxStatusChip(isTaxCalculated: Boolean, isPaid: Boolean, isPartiallyPaid: Boolean) {
+    val container = when {
+        isPaid -> MaterialTheme.colorScheme.primaryContainer
+        isTaxCalculated -> MaterialTheme.colorScheme.tertiaryContainer
+        else -> MaterialTheme.colorScheme.errorContainer
+    }
+    val content = when {
+        isPaid -> MaterialTheme.colorScheme.onPrimaryContainer
+        isTaxCalculated -> MaterialTheme.colorScheme.onTertiaryContainer
+        else -> MaterialTheme.colorScheme.onErrorContainer
+    }
+    Surface(color = container, shape = MaterialTheme.shapes.small) {
         Row(
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(4.dp),
         ) {
             Icon(
-                imageVector = if (isTaxCalculated) Icons.Default.Payment else Icons.Default.HourglassEmpty,
+                imageVector = when {
+                    isPaid -> Icons.Default.CheckCircle
+                    isTaxCalculated -> Icons.Default.Payment
+                    else -> Icons.Default.HourglassEmpty
+                },
                 contentDescription = null,
-                tint = if (isTaxCalculated) MaterialTheme.colorScheme.onTertiaryContainer
-                else MaterialTheme.colorScheme.onErrorContainer,
+                tint = content,
                 modifier = Modifier.padding(end = 2.dp),
             )
             Text(
-                text = stringResource(if (isTaxCalculated) Res.string.unpaid_status else Res.string.untaxed_status),
+                text = stringResource(
+                    when {
+                        isPaid -> Res.string.paid_status
+                        isPartiallyPaid -> Res.string.partially_paid_status
+                        isTaxCalculated -> Res.string.unpaid_status
+                        else -> Res.string.untaxed_status
+                    }
+                ),
                 style = MaterialTheme.typography.labelSmall,
-                color = if (isTaxCalculated) MaterialTheme.colorScheme.onTertiaryContainer
-                else MaterialTheme.colorScheme.onErrorContainer,
+                color = content,
             )
         }
+    }
+}
+
+private fun TaxType.label() = when (this) {
+    TaxType.SINGLE_TAX -> Res.string.tax_type_single
+    TaxType.MILITARY_LEVY -> Res.string.tax_type_military
+    TaxType.ESV -> Res.string.tax_type_esv
+}
+
+private fun TaxCalculation.amount(type: TaxType) = when (type) {
+    TaxType.SINGLE_TAX -> singleTax
+    TaxType.MILITARY_LEVY -> militaryLevy
+    TaxType.ESV -> esv
+}
+
+@Composable
+private fun PayTypesSelector(
+    result: TaxCalculation,
+    selected: Set<TaxType>,
+    onToggle: (TaxType) -> Unit,
+) {
+    val uah = stringResource(Res.string.currency_uah)
+    Column {
+        Text(stringResource(Res.string.what_to_pay), style = MaterialTheme.typography.titleSmall)
+        TaxType.entries.filter { result.amount(it) > 0.0 }.forEach { type ->
+            Row(
+                modifier = Modifier.fillMaxWidth().clickable { onToggle(type) },
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Checkbox(checked = type in selected, onCheckedChange = { onToggle(type) })
+                Text(stringResource(type.label()), modifier = Modifier.weight(1f))
+                Text("${result.amount(type).formatNumber()} $uah", fontWeight = FontWeight.Medium)
+            }
+        }
+        val total = TaxType.entries.filter { it in selected }.sumOf { result.amount(it) }
+        Text(
+            "${stringResource(Res.string.selected_to_pay)}: ${total.formatNumber()} $uah",
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(top = 4.dp),
+        )
     }
 }

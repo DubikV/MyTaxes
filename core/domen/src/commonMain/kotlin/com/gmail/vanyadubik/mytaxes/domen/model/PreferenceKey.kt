@@ -16,9 +16,10 @@ sealed class PreferenceKey<T>(
     data object UserId : PreferenceKey<String>("USER_ID_PREFERENCE", typeOf<String>())
     data object UserEmail : PreferenceKey<String>("USER_EMAIL_PREFERENCE", typeOf<String>())
     data object TaxIncomesKey : PreferenceKey<String>("TAX_INCOMES_PREFERENCE", typeOf<String>())
+    data object PushMessagesKey : PreferenceKey<String>("PUSH_MESSAGES_PREFERENCE", typeOf<String>())
 
     companion object {
-        fun getAllKeys() = listOf(Theme, Language, FopGroupKey, IdToken, RefreshToken, TokenExpiresAt, UserId, UserEmail, TaxIncomesKey)
+        fun getAllKeys() = listOf(Theme, Language, FopGroupKey, IdToken, RefreshToken, TokenExpiresAt, UserId, UserEmail, TaxIncomesKey, PushMessagesKey)
 
         fun getSavedKeys() = listOf(Theme, Language, FopGroupKey, TaxIncomesKey)
     }

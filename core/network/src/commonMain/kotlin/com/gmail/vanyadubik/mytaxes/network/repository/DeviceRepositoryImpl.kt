@@ -46,6 +46,18 @@ class DeviceRepositoryImpl(
         Unit
     }
 
+    override suspend fun updateUnpaidTax(userId: String, idToken: String, token: String, amount: Double): ResultState<Unit> = apiCall {
+        // The mask keeps the other fields; a missing document (not registered yet) is not created by this call
+        httpClient.patch(documentUrl(userId, token) + "?updateMask.fieldPaths=unpaidTax&currentDocument.exists=true") {
+            bearerAuth(idToken)
+            contentType(ContentType.Application.Json)
+            setBody(json.encodeToString(JsonObject.serializer(), buildJsonObject {
+                put("fields", buildJsonObject { put("unpaidTax", buildJsonObject { put("doubleValue", amount) }) })
+            }))
+        }.bodyOrThrow(json, ::errorMapper)
+        Unit
+    }
+
     override suspend fun unregister(userId: String, idToken: String, token: String): ResultState<Unit> = apiCall {
         httpClient.delete(documentUrl(userId, token)) {
             bearerAuth(idToken)
@@ -59,6 +71,7 @@ class DeviceRepositoryImpl(
             put("language", buildJsonObject { put("stringValue", language) })
             put("group", buildJsonObject { put("stringValue", group.id) })
             put("taxReminderMode", buildJsonObject { put("stringValue", taxReminderMode.id) })
+            put("unpaidTax", buildJsonObject { put("doubleValue", unpaidTax) })
             put("updatedAt", buildJsonObject { put("integerValue", Clock.System.now().toEpochMilliseconds().toString()) })
         })
     }

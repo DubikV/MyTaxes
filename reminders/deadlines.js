@@ -93,6 +93,7 @@ const TEXTS = {
     declaration: "Подання декларації платника єдиного податку",
     quarterTax: "Сплата єдиного податку і військового збору за квартал",
     esv: "Сплата ЄСВ",
+    unpaid: "Неоплачено",
   },
   en: {
     title: { 0: "Tax deadline is today", 3: "Tax deadline in 3 days" },
@@ -101,17 +102,25 @@ const TEXTS = {
     declaration: "Single tax declaration",
     quarterTax: "Quarterly single tax and military levy payment",
     esv: "Single social contribution (ESV) payment",
+    unpaid: "Unpaid",
   },
 };
 
-function messageFor(reminders, language, isMonthly = false) {
+function unpaidText(unpaidTax, language) {
+  if (!(unpaidTax > 0)) return "";
+  const amount = unpaidTax.toLocaleString(language === "uk" ? "uk-UA" : "en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  return `. ${(TEXTS[language] || TEXTS.en).unpaid}: ${amount} ₴`;
+}
+
+function messageFor(reminders, language, isMonthly = false, unpaidTax = 0) {
   const t = TEXTS[language] || TEXTS.en;
+  const unpaid = unpaidText(unpaidTax, language);
   if (isMonthly) {
     const body = reminders.map((r) => t[r.kind] || t.monthlyTax).join("; ");
-    return { title: t.monthlyTitle, body };
+    return { title: t.monthlyTitle, body: body + unpaid };
   }
   const daysLeft = Math.min(...reminders.map((r) => r.daysLeft));
-  return { title: t.title[daysLeft], body: reminders.map((r) => t[r.kind]).join("; ") };
+  return { title: t.title[daysLeft], body: reminders.map((r) => t[r.kind]).join("; ") + unpaid };
 }
 
 module.exports = { remindersFor, monthlyRemindersFor, isLastDayOfMonth, messageFor };

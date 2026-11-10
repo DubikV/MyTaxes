@@ -139,6 +139,15 @@
     <string name="taxed_status">Taxed</string>
     <string name="untaxed_status">Untaxed</string>
     <string name="unpaid_status">Unpaid</string>
+    <string name="paid_status">Paid</string>
+    <string name="partially_paid_status">Partially paid</string>
+    <string name="tax_type_single">Single tax</string>
+    <string name="tax_type_military">Military levy</string>
+    <string name="tax_type_esv">ESV</string>
+    <string name="what_to_pay">What are you paying now?</string>
+    <string name="selected_to_pay">To pay</string>
+    <string name="mark_as_paid">Mark as paid</string>
+    <string name="mark_as_unpaid">Mark as unpaid</string>
     <string name="calculate_tax">Calculate tax</string>
     <string name="calculate_taxes">Calculate taxes</string>
     <string name="calculate_untaxed">Calculate untaxed</string>
@@ -155,4 +164,9 @@
     <string name="amount_to_pay_format">To pay: %1$s %2$s</string>
     <string name="quantity_format">Quantity: %1$d</string>
     <string name="close">Close</string>
+    <string name="notifications_title">Notifications</string>
+    <string name="notifications_empty">No notifications yet</string>
+    <string name="notifications_mark_all_read">Mark all as read</string>
+    <string name="notifications_clear_all">Clear all notifications</string>
+    <string name="notifications_clear_message">All notifications will be deleted permanently.</string>
 </resources>

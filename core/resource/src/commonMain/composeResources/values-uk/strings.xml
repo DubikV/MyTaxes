@@ -139,6 +139,15 @@
     <string name="taxed_status">Оподатковано</string>
     <string name="untaxed_status">Не оподатковано</string>
     <string name="unpaid_status">Не оплачено</string>
+    <string name="paid_status">Оплачено</string>
+    <string name="partially_paid_status">Частково оплачено</string>
+    <string name="tax_type_single">Єдиний податок</string>
+    <string name="tax_type_military">Військовий збір</string>
+    <string name="tax_type_esv">ЄСВ</string>
+    <string name="what_to_pay">Що ви сплачуєте зараз?</string>
+    <string name="selected_to_pay">До сплати</string>
+    <string name="mark_as_paid">Позначити оплаченими</string>
+    <string name="mark_as_unpaid">Позначити неоплаченими</string>
     <string name="calculate_tax">Розрахувати податок</string>
     <string name="calculate_taxes">Розрахувати податки</string>
     <string name="calculate_untaxed">Розрахувати неоподатковані</string>
@@ -155,4 +164,9 @@
     <string name="amount_to_pay_format">До сплати: %1$s %2$s</string>
     <string name="quantity_format">Кількість: %1$d</string>
     <string name="close">Закрити</string>
+    <string name="notifications_title">Сповіщення</string>
+    <string name="notifications_empty">Сповіщень поки немає</string>
+    <string name="notifications_mark_all_read">Позначити всі прочитаними</string>
+    <string name="notifications_clear_all">Очистити всі сповіщення</string>
+    <string name="notifications_clear_message">Усі сповіщення буде видалено назавжди.</string>
 </resources>

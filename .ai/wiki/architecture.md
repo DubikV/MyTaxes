@@ -9,7 +9,7 @@ composeApp  --->  feature:*  --->  core:common-ui / core:network / core:data-sto
 ```
 
 - **`composeApp`**: Точка входу в додаток (Android Application / iOS Framework), ініціалізація Koin DI (`initKoin`), головне вікно та верхньорівнева навігація (`AppNavigation`).
-- **`feature:*`**: Фічні модулі (`login`, `taxes`, `account`, `home`, `auto`). Фічі **не залежать одна від одної**. Кожна фіча містить свій UI (Compose UI) та ViewModel.
+- **`feature:*`**: Фічні модулі (`login`, `taxes`, `account`, `home`, `auto`, `notifications`). Фічі **не залежать одна від одної**. Кожна фіча містить свій UI (Compose UI) та ViewModel.
 - **`core:domen`**: Чистий Kotlin-модуль без залежностей від Compose чи Ktor. Містить доменні моделі (`TaxCalculation`, `TaxIncomeItem`, `FopGroup`, `Currency`, `AutoServiceRecord`, `Car`, `AccountProfile`), інтерфейси репозиторіїв та бізнес-логіку у вигляді use-case'ів (`CalculateTaxUseCase`, `TaxesUseCase`, `AutoServiceUseCase`, `AccountUseCase` тощо).
 - **`core:network`**: Реалізація репозиторіїв для роботи з зовнішніми мережевими API (офіційні курси валют НБУ, Firebase Auth REST API, Cloud Firestore REST API).
 - **`core:data-store`**: Кросплатформена реалізація локального сховища Preferences на базі AndroidX DataStore (Expect/Actual для Android та iOS).
@@ -102,3 +102,19 @@ startKoin {
 ```
 
 Кожен модуль надає власний метод `di/Module.kt` (наприклад, `featureTaxesModule()`), що робить структуру модульною та легко розширюваною.
+
+---
+
+## 7. Конфігурація та параметри (BuildConfig)
+
+Усі API-ключі, ID додатків та конфігураційні параметри (наприклад, Firebase Options: `FIREBASE_APP_ID`, `FIREBASE_API_KEY`, `FIREBASE_PROJECT_ID`, `FIREBASE_GCM_SENDER_ID`) **заборонено хардкодити у вихідному коді Kotlin**.
+
+Усі подібні значення виносяться через `buildConfigField` у файл `build.gradle.kts` відповідного модуля і звернення до них здійснюється виключно через згенерований `BuildConfig`:
+```kotlin
+val firebaseAndroidOptions: FirebaseOptions = FirebaseOptions.Builder()
+    .setApplicationId(BuildConfig.FIREBASE_APP_ID)
+    .setApiKey(BuildConfig.FIREBASE_API_KEY)
+    .setProjectId(BuildConfig.FIREBASE_PROJECT_ID)
+    .setGcmSenderId(BuildConfig.FIREBASE_GCM_SENDER_ID)
+    .build()
+```

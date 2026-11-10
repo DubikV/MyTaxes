@@ -3,6 +3,7 @@ package com.gmail.vanyadubik.myassistant.featuretaxes.screens.history.model
 import com.gmail.vanyadubik.myassistant.domen.model.FopGroup
 import com.gmail.vanyadubik.myassistant.domen.model.TaxCalculation
 import com.gmail.vanyadubik.myassistant.domen.model.TaxIncomeItem
+import com.gmail.vanyadubik.myassistant.domen.model.TaxType
 
 data class TaxesHistoryUiState(
     val incomes: List<TaxIncomeItem> = emptyList(),
@@ -13,4 +14,7 @@ data class TaxesHistoryUiState(
     val actionError: String? = null,
     val errorMessage: String? = null,
     val calculationResult: TaxCalculation? = null,
+    /** Set while the payment sheet is open: incomes being paid and the tax types chosen to mark as paid. */
+    val payIds: Set<String>? = null,
+    val payTypes: Set<TaxType> = emptySet(),
 )
